@@ -6,7 +6,7 @@
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/28 10:47:52 by conoel            #+#    #+#             */
-/*   Updated: 2019/03/19 16:54:39 by conoel           ###   ########.fr       */
+/*   Updated: 2019/04/19 16:26:43 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,12 @@ void		exit_(char *msg)
 size_t		return_free(char *msg, int format, ...)
 {
 	va_list	ap;
+	void	*ptr;
 
 	va_start(ap, format);
 	while (format-- > 0)
-		free(va_arg(ap, void *));
+		if ((ptr = (va_arg(ap, void *))))
+			free(ptr);
 	msg_(msg);
 	return (0);
 }

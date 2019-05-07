@@ -6,11 +6,12 @@
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/09 16:41:16 by conoel            #+#    #+#             */
-/*   Updated: 2019/03/19 16:56:20 by conoel           ###   ########.fr       */
+/*   Updated: 2019/04/19 18:12:29 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include "garbage.h"
 
 char	*ft_strjoin(char const *s1, char const *s2)
 {

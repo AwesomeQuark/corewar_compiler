@@ -1,21 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   getc.c                                             :+:      :+:    :+:   */
+/*   concat.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/02/12 17:36:52 by conoel            #+#    #+#             */
-/*   Updated: 2019/02/12 18:26:55 by conoel           ###   ########.fr       */
+/*   Created: 2019/04/27 23:02:12 by conoel            #+#    #+#             */
+/*   Updated: 2019/04/30 13:10:11 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int ft_getc(int fd)
+char	*concat(char *s1, char *s2, char *s3)
 {
-	char	c;
+	size_t	len;
+	char	*ret;
 
-	read(fd, &c, 1);
-	return((int)c)
+	len = ft_strlen(s1) + ft_strlen(s2) + ft_strlen(s3) + 3;
+	ret = malloc(sizeof(char) * (len));
+	ft_bzero(ret, len);
+	ft_strcat(ret, s1);
+	ft_strcat(ret, s2);
+	ft_strcat(ret, s3);
+	return (ret);
 }

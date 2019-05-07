@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer_token_manipulation.c                         :+:      :+:    :+:   */
+/*   token_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 15:28:10 by conoel            #+#    #+#             */
-/*   Updated: 2019/04/09 17:37:06 by conoel           ###   ########.fr       */
+/*   Updated: 2019/05/07 19:51:08 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,13 @@ static t_token	*last_token(t_token *head)
 	return (head);
 }
 
-int				add_token(char *content, size_t size, t_token_type type, t_token *head)
+int				add_token(char *content, size_t size, t_token_type type,
+	t_token *head)
 {
 	t_token	*new;
 	t_token	*last;
 
-	if (!(new = malloc_garbage(sizeof(t_token))))
+	if (!(new = malloc(sizeof(t_token))))
 		return (0);
 	new->content = ft_memdup(content, size);
 	new->size = size;
@@ -38,13 +39,19 @@ int				add_token(char *content, size_t size, t_token_type type, t_token *head)
 	return (1);
 }
 
-t_token_type	misc_type(char *str, size_t size)
+void			release_tokens(t_token *head)
 {
-	size_t	i;
+	t_token *tmp;
 
-	i = 0;
-	while (str[i] && size--)
-		if (!ft_isdigit(str[i]))
-			return (MISC_STRING);
-	return (MISC_INT);
+	if (!head)
+		return ;
+	while (head)
+	{
+		if (head->content)
+			free(head->content);
+		tmp = head;
+		head = head->next;
+		free(tmp);
+	}
+	head = NULL;
 }

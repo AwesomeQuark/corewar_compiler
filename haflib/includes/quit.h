@@ -1,28 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strcat.c                                        :+:      :+:    :+:   */
+/*   quit.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/09 10:43:26 by conoel            #+#    #+#             */
-/*   Updated: 2019/04/28 18:11:40 by conoel           ###   ########.fr       */
+/*   Created: 2019/04/08 14:59:04 by conoel            #+#    #+#             */
+/*   Updated: 2019/04/25 16:53:39 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#ifndef QUIT_H
+# define QUIT_H
 
-char	*ft_strcat(char *s1, const char *s2)
-{
-	char *save;
+# include <unistd.h>
 
-	save = s1;
-	if (!s2)
-		return (s1);
-	while (*s1)
-		s1++;
-	while (*s2)
-		*s1++ = *s2++;
-	*s1 = '\0';
-	return (save);
-}
+void				exit_free(char *msg, int format, ...);
+void				exit_(char *msg);
+size_t				return_free(char *msg, int format, ...);
+size_t				return_(char *msg);
+
+#endif

@@ -1,28 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strcat.c                                        :+:      :+:    :+:   */
+/*   ft_is.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/09 10:43:26 by conoel            #+#    #+#             */
-/*   Updated: 2019/04/28 18:11:40 by conoel           ###   ########.fr       */
+/*   Created: 2019/04/08 15:01:22 by conoel            #+#    #+#             */
+/*   Updated: 2019/04/25 16:53:23 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#ifndef FT_IS_H
+# define FT_IS_H
 
-char	*ft_strcat(char *s1, const char *s2)
-{
-	char *save;
+int					ft_isalnum(int c);
+int					ft_isalpha(int c);
+int					ft_isascii(int c);
+int					ft_isdigit(int c);
+int					ft_isprint(int c);
+int					ft_isspace(int c);
+int					ft_isblank(int c);
+int					ft_iscntrl(int c);
+int					ft_isgraph(int c);
+int					ft_islower(int c);
+int					ft_isupper(int c);
+int					ft_isalphanum_base(int c, int base, int maj);
 
-	save = s1;
-	if (!s2)
-		return (s1);
-	while (*s1)
-		s1++;
-	while (*s2)
-		*s1++ = *s2++;
-	*s1 = '\0';
-	return (save);
-}
+#endif

@@ -6,72 +6,75 @@
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/09 15:52:03 by conoel            #+#    #+#             */
-/*   Updated: 2019/04/10 15:34:31 by conoel           ###   ########.fr       */
+/*   Updated: 2019/05/07 20:16:59 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 
-t_token_def	tokens[] =
+static t_token_def	g_tokens[] =
 {
-	{"{", 1, OPENING_BRACE},
-	{"}", 1, CLOSING_BRACE},
-	{"(", 1, OPENING_PARENTHESE},
-	{")", 1, CLOSING_PARENTHESE},
-	{"[", 1, OPENING_BRACKET},
-	{"]", 1, CLOSING_BRACKET},
-	{"+", 1, PLUS},
-	{"-", 1, MINUS},
-	{"/", 1, DIVIDE},
-	{"*", 1, MULTIPLY},
-	{"jood", 4, JEW},
-	{"AnneFrank", 9, PRINT},
-	{"optellen", 8, ADD},
+	{"live", 4, LIVE},
+	{"ld", 2, LD},
+	{"st", 2, ST},
+	{"add", 3, ADD},
+	{"and", 3, AND},
+	{"or", 2, OR},
+	{"zjmp", 4, ZJMP},
+	{"sti", 3, STI},
+	{"fork", 4, FORK},
+	{"lld", 3, LLD},
+	{"lldi", 4, LLDI},
+	{"lfork", 5, LFORK},
+	{"aff", 3, AFF},
 	{NULL, 0, STOP}
 };
 
-static int		handle_escape(char **file)
+static int			handle_escape(t_token *head, char **file,
+	char **last_token)
 {
-	if (**file == ' ' || **file == '\t' || **file == '\n')
-		return (1);
-	if (ft_strncmp(*file, "\\*", 2) == 0)
+	if (**file == ' ' || **file == '\t' || **file == '\n' || **file == ';')
 	{
-		while (*file && ft_strncmp(*file, "*\\", 2) != 0)
-			(*file) += 1;
-		return (1);
-	}
-	if (ft_strncmp(*file, "\"", 1) == 0)
-	{
-		(*file) += 1;
-		while (*file && ft_strncmp(*file, "\"", 2) != 0)
-			(*file) += 1;
-		return (1);
-	}
-	if (ft_strncmp(*file, "\'", 1) == 0)
-	{
-		(*file) += 1;
-		while (*file && ft_strncmp(*file, "\'", 2) != 0)
-			(*file) += 1;
+		if (*last_token != *file)
+			add_token(*last_token, *file - *last_token, STRING, head);
+		if (**file == ',')
+			add_token(",", 1, DOT, head);
+		*file += 1;
+		*last_token = *file;
 		return (1);
 	}
 	return (0);
 }
 
-static t_token_def	*search_token_type(char *file)
+static t_token_def	*search_token_type(char **file, char **last_token,
+	t_token *head)
 {
 	size_t	i;
 
 	i = 0;
-	while (tokens[i].type != STOP)
+	while (g_tokens[i].type != STOP)
 	{
-		if (ft_strncmp(file, tokens[i].content, tokens[i].size) == 0)
-			return (&tokens[i]);
+		if (ft_strncmp(*file, g_tokens[i].content, g_tokens[i].size) == 0
+			&& ((*file)[g_tokens[i].size] == ' '
+			|| (*file)[g_tokens[i].size] == '\n'
+			|| (*file)[g_tokens[i].size] == ',')
+			&& *last_token == *file)
+			return (&g_tokens[i]);
 		i++;
+	}
+	if (**file == ',')
+	{
+		if (*last_token != *file)
+			add_token(*last_token, *file - *last_token, STRING, head);
+		add_token(*file, 1, DOT, head);
+		*file += 1;
+		*last_token = *file;
+		return (search_token_type(file, last_token, head));
 	}
 	return (NULL);
 }
 
-int				lexer_main_loop(char *file, t_token *head)
+int					lexer_main_loop(char *file, t_token *head)
 {
 	t_token_def	*current;
 	char		*last_token_found;
@@ -79,48 +82,36 @@ int				lexer_main_loop(char *file, t_token *head)
 	last_token_found = file;
 	while (file && *file)
 	{
-		if (handle_escape(&file))
-		{
-			if (last_token_found != file && head->next != NULL)
-				add_token(last_token_found, file - last_token_found, misc_type(last_token_found, file - last_token_found), head);
-			file++;
-			last_token_found = file;
+		if (handle_escape(head, &file, &last_token_found))
 			continue ;
-		}
-		if (!(current = search_token_type(file)))
+		if (!(current = search_token_type(&file, &last_token_found, head)))
 		{
 			file++;
 			continue ;
 		}
-		if (last_token_found != file && head->next != NULL)
-			add_token(last_token_found, file - last_token_found, misc_type(last_token_found, file - last_token_found), head);
+		if (last_token_found != file)
+			add_token(last_token_found, file - last_token_found, STRING, head);
 		file += current->size;
 		last_token_found = file;
 		if (!(add_token(current->content, current->size, current->type, head)))
 			return (0);
 	}
-	if (last_token_found != file && head->next != NULL)
-		add_token(last_token_found, file - last_token_found, misc_type(last_token_found, file - last_token_found), head);
+	if (last_token_found != file && !(file - last_token_found == 1
+		&& *last_token_found == '\n'))
+		add_token(last_token_found, file - last_token_found, STRING, head);
 	return (1);
 }
 
-t_token			*lexer(int fd)
+t_token				*lexer(char *line)
 {
 	t_token	*head;
-	char	*file;
-	size_t	i;
 
-	if (fd < 0)
-		return (NULL);
-	i = 0;
-	if (!(file = get_the_file(fd)))
-		return ((t_token *)malloc_garbage(0));
-	if (!(head = malloc_garbage(sizeof(t_token))))
+	if (!(head = malloc(sizeof(t_token))))
 		return (NULL);
 	head->type = START;
 	head->next = NULL;
 	head->size = 0;
 	head->content = NULL;
-	lexer_main_loop(file, head);
+	lexer_main_loop(line, head);
 	return (head);
 }
