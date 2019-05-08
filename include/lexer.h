@@ -33,6 +33,8 @@ typedef enum
 	LFORK,
 	AFF,
 	LABEL,
+	REG,
+	DIRECT,
 	STRING,
 	SEPARATOR,
 	NAME,

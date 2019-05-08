@@ -12,58 +12,50 @@
 
 #include "asm.h"
 
-static t_ast_node	*get_ast(char *file_name)
+static t_token *get_tokens(char *file_name)
 {
 	int			fd;
 	char		*file;
 	t_token		*token_head;
-	t_ast_node	*instructions;
 
-	if (!(fd = open(file_name, O_RDONLY)))
-		return ((void *)return_("Error: can't read the file (get_ast, main.c)"));
+	if ((fd = open(file_name, O_RDONLY)) == -1)
+		return ((void *)return_("Error: can't read the file (get_tokens, main.c)"));
 	if (!(file = get_the_file(fd)))
 	{
 		close(fd);
-		return ((void *)return_("Error: can't load the file (get_ast, main.c)"));
+		return ((void *)return_("Error: can't load the file (get_tokens, main.c)"));
 	}
 	close(fd);
 	if (!(token_head = lexer(file)))
 	{
 		free(file);
-		return ((void *)return_("Error: lexer failure (get_ast, main.c)"));
+		return ((void *)return_("Error: lexer failure (get_tokens, main.c)"));
 	}
 	free(file);
-	/*if (!(instructions = build_ast(token_head)))
-	{
-		release_tokens(token_head);
-		return ((void *)return_("Error: ast build failure (get_ast, main.c)"));
-	}
-	release_tokens(token_head);*/
-	//return (instructions);
 	print_tokens(token_head);
-	return (NULL);
+	return (token_head);
 }
 
 int		main(int argc, char **argv)
 {
-	t_ast_node	*instructions;
+	t_token		*token_head;
 
 	if (argc < 2 || ft_strcmp(&(argv[1][ft_strlen(argv[1]) - 2]), ".s") != 0)
 	{
 		ft_putstr_fd("Usage: ./asm [champion_name].s\n", 2);
 		return (EXIT_FAILURE);
 	}
-	if ((instructions = get_ast(argv[1])) == NULL)
+	if ((token_head = get_tokens(argv[1])) == NULL)
 	{
-		ft_putstr_fd("Error: cannot build AST (main, main.c)\n", 2);
+		ft_putstr_fd("Error: cannot parse the file (main, main.c)\n", 2);
 		return (EXIT_FAILURE);
 	}
-/*	if (parse(instructions) == FALSE)
+	if (parse(token_head) == FALSE)
 	{
 		ft_putstr_fd("Error: parsing error (main, main.c)\n", 2);
 		return(EXIT_FAILURE);
 	}
-	if (transcribe(instructions) == FALSE)
+/*	if (transcribe(instructions) == FALSE)
 	{
 		ft_putstr_fd("Error: compilation failure (main, main.c)\n", 2);
 		return (EXIT_FAILURE);

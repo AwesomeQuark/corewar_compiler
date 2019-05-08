@@ -1,4 +1,3 @@
-/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
@@ -28,7 +27,7 @@ static t_token_def g_tokens[] =
 		{"lfork", 5, LFORK},
 		{"aff", 3, AFF},
 		{NAME_CMD_STRING, sizeof(NAME_CMD_STRING) - 1, NAME},
-		{COMMENT_CMD_STRING, sizeof(COMMENT_CMD_STRING), COMMENT},
+		{COMMENT_CMD_STRING, sizeof(COMMENT_CMD_STRING) - 1, COMMENT},
 		{NULL, 0, EOF_}
 };
 
@@ -40,7 +39,7 @@ static int			handle_escape(t_token *head, char **file,
 		if (*last_token != *file)
 			add_token(*last_token, *file - *last_token, STRING, head);
 		if (**file == SEPARATOR_CHAR)
-			add_token(",", 1, SEPARATOR, head);
+			add_token(",", 1, SEPARATOR, head);//changer par macro SEparator_char
 		*file += 1;
 		*last_token = *file;
 		return (1);

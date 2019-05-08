@@ -1,28 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   asm.h                                              :+:      :+:    :+:   */
+/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/07 19:26:11 by conoel            #+#    #+#             */
-/*   Updated: 2019/05/08 17:48:28 by conoel           ###   ########.fr       */
+/*   Created: 2018/11/09 17:42:21 by conoel            #+#    #+#             */
+/*   Updated: 2019/02/13 10:59:01 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ASM_H
-# define ASM_H
+#include "libft.h"
 
-# include <fcntl.h>
-# include "haflib.h"
-# include "lexer.h"
-# include "parser.h"
-
-# define TRUE 1
-# define FALSE 0
-
-int		parse(t_token *head);
-int		transcribe(t_token *head);
-int		is_instruction(t_token *token);
-
-#endif
+void	ft_putstr_fd(char const *s, int fd)
+{
+	if (!s)
+		return ;
+	write(fd, s, ft_strlen(s));
+}

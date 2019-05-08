@@ -3,6 +3,6 @@
 
 l2:		sti r1, %:live, %1
 		and r1, %0, r1
-live:	live %1
+live: test:	live %1
 #looool    lo l o l o l o l o l o o
 		zjmp %:live

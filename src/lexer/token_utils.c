@@ -22,7 +22,7 @@ static t_token	*last_token(t_token *head)
 }
 
 int				add_token(char *content, size_t size, t_token_type type,
-	t_token *head)
+		t_token *head)
 {
 	t_token	*new;
 	t_token	*last;
@@ -36,8 +36,15 @@ int				add_token(char *content, size_t size, t_token_type type,
 	if (!(last = last_token(head)))
 		return (0);
 	last->next = new;
-	if (type == STRING && content[size - 1] == LABEL_CHAR)
-		new->type = LABEL;
+	if (type == STRING)
+	{
+		if (size > 0 && content[size - 1] == LABEL_CHAR)
+			new->type = LABEL;
+		else if (content[0] == 'r')
+			new->type = REG;
+		else if (content[0] == DIRECT_CHAR)
+			new->type = DIRECT;
+	}
 	return (1);
 }
 
@@ -55,15 +62,40 @@ void			release_tokens(t_token *head)
 		head = head->next;
 		free(tmp);
 	}
-	head = NULL;
 }
+
+static char *definitions[] =
+{
+	"START",
+	"LIVE",
+	"LD",
+	"ST",
+	"ADD",
+	"AND",
+	"OR",
+	"ZJMP",
+	"STI",
+	"FORK",
+	"LLD",
+	"LLDI",
+	"LFORK",
+	"AFF",
+	"LABEL",
+	"REG",
+	"DIRECT",
+	"STRING",
+	"SEPARATOR",
+	"NAME",
+	"COMMENT",
+	"EOF"
+};
 
 void			print_tokens(t_token *head)
 {
 	head = head->next;
 	while (head)
 	{
-		ft_printf("<\033[1m%s\033[0m [\033[31m%d\033[0m]> ", head->content, head->type);
+		ft_printf("<\033[1m%s\033[0m [\033[31m%s\033[0m]> ", head->content, definitions[head->type]);
 		head = head->next;
 	}
 	write(1, "\n", 1);

@@ -20,16 +20,18 @@ AUTEUR =		"conoel"
 ###### SOURCES #######
 
 SRC_NAME =		main.c\
-				$(LEXER)
+			utils.c\
+				$(LEXER)\
+				$(PARSER)
 
 LEXER_SRC =		lexer.c\
 				token_utils.c
 LEXER_DIR =		lexer/
 LEXER =			${addprefix $(LEXER_DIR), $(LEXER_SRC)}
 
-AST_SRC =		ast.c
-AST_DIR =		ast/
-AST =			${addprefix $(AST_DIR), $(AST_SRC)}
+PARSER_SRC =		parser.c
+PARSER_DIR =		parser/
+PARSER =		${addprefix $(PARSER_DIR), $(PARSER_SRC)}
 
 SRC_DIR =		./src/
 SRC =			${addprefix $(SRC_DIR), $(SRC_NAME)}
@@ -39,14 +41,14 @@ OBJ_DIR =		./obj/
 OBJ =			${addprefix $(OBJ_DIR), $(OBJ_NAME)}
 
 ALL_OBJ_DIR =	$(OBJ_DIR)$(LEXER_DIR)\
-				$(OBJ_DIR)$(AST_DIR)
+				$(OBJ_DIR)$(PARSER_DIR)
 
 ###### HEADERS ########
 
 HEADER_DIR =	./include/
 HEADER_NAME =	asm.h\
 				lexer.h\
-				AST.h
+				parser.h
 HEADER =		${addprefix $(HEADER_DIR), $(HEADER_NAME)}
 
 #######  LIBS  ########
@@ -58,7 +60,7 @@ LIB =			${addprefix $(LIB_DIR), $(LIB_NAME)}
 
 #######  MISC  ########
 
-FLAGS =			#-Wall -Werror -Wextra
+FLAGS =			-Wall -Werror -Wextra -g3
 DEBUG_FLAGS =	$(FLAGS) -O0 -g3 -fsanitize=address
 CC =			clang
 
@@ -85,7 +87,7 @@ fclean:
 	echo "\033[31m\033[1m\033[4mCleaning\033[0m\033[31m : Everything\033[0m [$(NAME)]";
 
 debug:
-	make fclean
+	rm -r $(OBJ_DIR)
 	make $(NAME)_debug
 
 ######### COMPILATION #########
@@ -106,7 +108,6 @@ $(OBJ_DIR)%.o: $(SRC_DIR)%.c $(HEADER)
 
 $(OBJ_DIR): $(ALL_OBJ_DIR)
 	mkdir -p $(OBJ_DIR)
-	echo "\n>=========== * \033[32m\033[1mCreating $(NAME) obj dir\033[0m * ===========<";
 
 $(ALL_OBJ_DIR):
 	mkdir -p $@
@@ -118,14 +119,14 @@ $(ALL_OBJ_DIR):
 
 header_print:
 	clear
-	echo "########################"
-	echo "##\033[32m   ____  ___  ___   \033[0m##"
-	echo "##\033[32m  /  __||   \/   |  \033[0m##"
-	echo "##\033[32m  |__  ||  \__/  |  \033[0m##"
-	echo "##\033[32m  |____/|__|__|__|  \033[0m##"
-	echo "##\033[32m  |____/|__|  |__|  \033[0m##"
-	echo "##                    ##"
-	echo "########\033[32m CONOEL \033[0m########"
+	echo "############################"
+	echo "##\033[32m   ___   ____  __  __   \033[0m##"
+	echo "##\033[32m  /   \ /  __\|  \/  |  \033[0m##"
+	echo "##\033[32m | /_\ ||__  || \__/ |  \033[0m##"
+	echo "##\033[32m |_|_|_|\____/|__||__|  \033[0m##"
+	echo "##\033[32m |_| |_|\____/|__||__|  \033[0m##"
+	echo "##                        ##"
+	echo "##########\033[32m CONOEL \033[0m##########"
 
 ############# LIB #############
 
