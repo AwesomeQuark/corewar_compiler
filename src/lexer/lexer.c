@@ -6,44 +6,61 @@
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/09 15:52:03 by conoel            #+#    #+#             */
-/*   Updated: 2019/05/07 20:16:59 by conoel           ###   ########.fr       */
+/*   Updated: 2019/05/08 15:41:41 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 
-static t_token_def	g_tokens[] =
-{
-	{"live", 4, LIVE},
-	{"ld", 2, LD},
-	{"st", 2, ST},
-	{"add", 3, ADD},
-	{"and", 3, AND},
-	{"or", 2, OR},
-	{"zjmp", 4, ZJMP},
-	{"sti", 3, STI},
-	{"fork", 4, FORK},
-	{"lld", 3, LLD},
-	{"lldi", 4, LLDI},
-	{"lfork", 5, LFORK},
-	{"aff", 3, AFF},
-	{NULL, 0, STOP}
+static t_token_def g_tokens[] =
+	{
+		{"live", 4, LIVE},
+		{"ld", 2, LD},
+		{"st", 2, ST},
+		{"add", 3, ADD},
+		{"and", 3, AND},
+		{"or", 2, OR},
+		{"zjmp", 4, ZJMP},
+		{"sti", 3, STI},
+		{"fork", 4, FORK},
+		{"lld", 3, LLD},
+		{"lldi", 4, LLDI},
+		{"lfork", 5, LFORK},
+		{"aff", 3, AFF},
+		{NAME_CMD_STRING, sizeof(NAME_CMD_STRING) - 1, NAME},
+		{COMMENT_CMD_STRING, sizeof(COMMENT_CMD_STRING), COMMENT},
+		{NULL, 0, EOF_}
 };
 
 static int			handle_escape(t_token *head, char **file,
 	char **last_token)
 {
-	if (**file == ' ' || **file == '\t' || **file == '\n' || **file == ';')
+	if (**file == ' ' || **file == '\t' || **file == '\n' || **file == SEPARATOR_CHAR)
 	{
 		if (*last_token != *file)
 			add_token(*last_token, *file - *last_token, STRING, head);
-		if (**file == ',')
-			add_token(",", 1, DOT, head);
+		if (**file == SEPARATOR_CHAR)
+			add_token(",", 1, SEPARATOR, head);
 		*file += 1;
 		*last_token = *file;
 		return (1);
 	}
-	return (0);
+	if (**file == '"')
+		skip_until_char(file, last_token, '\"');
+	else if (**file == '\'')
+		skip_until_char(file, last_token, '\'');
+	else if (**file == COMMENT_CHAR)
+	{
+		skip_until_char(file, last_token, '\n');
+		*last_token = *file;
+	}
+	else
+		return (0);
+	if (*last_token != *file)
+		add_token(*last_token, *file - *last_token, STRING, head);
+	*file += 1;
+	*last_token = *file;
+	return (1);
 }
 
 static t_token_def	*search_token_type(char **file, char **last_token,
@@ -52,21 +69,22 @@ static t_token_def	*search_token_type(char **file, char **last_token,
 	size_t	i;
 
 	i = 0;
-	while (g_tokens[i].type != STOP)
+	while (g_tokens[i].type != EOF_)
 	{
 		if (ft_strncmp(*file, g_tokens[i].content, g_tokens[i].size) == 0
 			&& ((*file)[g_tokens[i].size] == ' '
 			|| (*file)[g_tokens[i].size] == '\n'
-			|| (*file)[g_tokens[i].size] == ',')
+			|| (*file)[g_tokens[i].size] == SEPARATOR_CHAR
+			|| (*file)[g_tokens[i].size] == 0)
 			&& *last_token == *file)
 			return (&g_tokens[i]);
 		i++;
 	}
-	if (**file == ',')
+	if (**file == SEPARATOR_CHAR)
 	{
 		if (*last_token != *file)
 			add_token(*last_token, *file - *last_token, STRING, head);
-		add_token(*file, 1, DOT, head);
+		add_token(*file, 1, SEPARATOR, head);
 		*file += 1;
 		*last_token = *file;
 		return (search_token_type(file, last_token, head));
@@ -113,5 +131,6 @@ t_token				*lexer(char *line)
 	head->size = 0;
 	head->content = NULL;
 	lexer_main_loop(line, head);
+	add_token("EOF", 3, EOF_, head);
 	return (head);
 }

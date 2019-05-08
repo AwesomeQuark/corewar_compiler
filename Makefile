@@ -10,12 +10,26 @@
 #                                                                              #
 # **************************************************************************** #
 
+#################################################################################
+##################################### VARS ######################################
+#################################################################################
+
 NAME =			asm
 AUTEUR =		"conoel"
 
+###### SOURCES #######
+
 SRC_NAME =		main.c\
-				lexer.c\
-				token_utils.c\
+				$(LEXER)
+
+LEXER_SRC =		lexer.c\
+				token_utils.c
+LEXER_DIR =		lexer/
+LEXER =			${addprefix $(LEXER_DIR), $(LEXER_SRC)}
+
+AST_SRC =		ast.c
+AST_DIR =		ast/
+AST =			${addprefix $(AST_DIR), $(AST_SRC)}
 
 SRC_DIR =		./src/
 SRC =			${addprefix $(SRC_DIR), $(SRC_NAME)}
@@ -24,17 +38,28 @@ OBJ_NAME =		$(SRC_NAME:.c=.o)
 OBJ_DIR =		./obj/
 OBJ =			${addprefix $(OBJ_DIR), $(OBJ_NAME)}
 
+ALL_OBJ_DIR =	$(OBJ_DIR)$(LEXER_DIR)\
+				$(OBJ_DIR)$(AST_DIR)
+
+###### HEADERS ########
+
 HEADER_DIR =	./include/
 HEADER_NAME =	asm.h\
-				lexer.h
+				lexer.h\
+				AST.h
 HEADER =		${addprefix $(HEADER_DIR), $(HEADER_NAME)}
+
+#######  LIBS  ########
 
 LIB_NAME =		haflib.a
 LIB_DIR =		./haflib/
 LIB_HEADER =	./haflib/includes/
 LIB =			${addprefix $(LIB_DIR), $(LIB_NAME)}
 
-FLAGS =			-Wall -Werror -Wextra -O0 -g3 -fsanitize=address
+#######  MISC  ########
+
+FLAGS =			#-Wall -Werror -Wextra
+DEBUG_FLAGS =	$(FLAGS) -O0 -g3 -fsanitize=address
 CC =			clang
 
 #################################################################################
@@ -44,9 +69,7 @@ CC =			clang
 .PHONY: all clean fclean re
 .SILENT:
 
-##############################
 ########## GENERALS ##########
-##############################
 
 all: ./auteur $(LIB) $(OBJ_DIR) $(NAME) $(HEADER)
 
@@ -61,13 +84,39 @@ fclean:
 	rm -rf $(OBJ_DIR) $(NAME) *.dSYM
 	echo "\033[31m\033[1m\033[4mCleaning\033[0m\033[31m : Everything\033[0m [$(NAME)]";
 
-###############################
+debug:
+	make fclean
+	make $(NAME)_debug
+
 ######### COMPILATION #########
-###############################
 
 $(NAME): $(OBJ)
 	$(CC) $(FLAGS) $(OBJ) $(LIB) -o $(NAME) -I$(HEADER_DIR) -I$(LIB_DIR)
 	echo "\n \033[1m\033[4m\033[35m\\^/ Done compiling \\^/\033[0m [$(NAME)] --> $(LIB_NAME)"
+	make header_print
+
+$(NAME)_debug: ./auteur $(LIB) $(OBJ_DIR) $(HEADER) $(OBJ)
+	$(CC) $(DEBUG_FLAGS) $(OBJ) $(LIB) -o $(NAME) -I$(HEADER_DIR) -I$(LIB_DIR)
+	echo "\n \033[1m\033[4m\033[35m\\^/ Done compiling \\^/\033[0m [$(NAME)] --> $(LIB_NAME)"
+	make header_print
+
+$(OBJ_DIR)%.o: $(SRC_DIR)%.c $(HEADER)
+	$(CC) $(FLAGS) -c $< -o $@ -I$(HEADER_DIR) -I$(LIB_HEADER)
+	printf "\033[32m\033[1m\033[4mCompiling\033[0m\033[32m : %-30s \033[0m [$(NAME)]\n" $@
+
+$(OBJ_DIR): $(ALL_OBJ_DIR)
+	mkdir -p $(OBJ_DIR)
+	echo "\n>=========== * \033[32m\033[1mCreating $(NAME) obj dir\033[0m * ===========<";
+
+$(ALL_OBJ_DIR):
+	mkdir -p $@
+	echo "\033[32m\033[1m\033[4mCreated033[0m\033[32m : $@ obj dir\033[0m"
+
+./auteur:
+	echo $(AUTEUR) > ./auteur
+	echo "\033[32m<Created Author file>\033[0m"
+
+header_print:
 	clear
 	echo "########################"
 	echo "##\033[32m   ____  ___  ___   \033[0m##"
@@ -78,23 +127,7 @@ $(NAME): $(OBJ)
 	echo "##                    ##"
 	echo "########\033[32m CONOEL \033[0m########"
 
-$(OBJ_DIR)%.o: $(SRC_DIR)%.c $(HEADER)
-	$(CC) $(FLAGS) -c $< -o $@ -I$(HEADER_DIR) -I$(LIB_HEADER)
-	printf "\033[32m\033[1m\033[4mCompiling\033[0m\033[32m : %-30s \033[0m [$(NAME)]\n" $@
-
-
-$(OBJ_DIR):
-	clear
-	mkdir $(OBJ_DIR)
-	echo "\n>=========== * \033[32m\033[1mCreating $(NAME) obj dir\033[0m * ===========<";
-
-./auteur:
-	echo $(AUTEUR) > ./auteur
-	echo "\033[32m<Created Author file>\033[0m"
-
-###############################
 ############# LIB #############
-###############################
 
 $(LIB):
 	make -C $(LIB_DIR)
