@@ -29,7 +29,8 @@ LEXER_SRC =		lexer.c\
 LEXER_DIR =		lexer/
 LEXER =			${addprefix $(LEXER_DIR), $(LEXER_SRC)}
 
-PARSER_SRC =		parser.c
+PARSER_SRC =		parser.c\
+					check.c
 PARSER_DIR =		parser/
 PARSER =		${addprefix $(PARSER_DIR), $(PARSER_SRC)}
 

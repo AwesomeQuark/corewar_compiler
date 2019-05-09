@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
+/*   By: magicwarthog <magicwarthog@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 15:28:10 by conoel            #+#    #+#             */
-/*   Updated: 2019/05/08 18:21:55 by conoel           ###   ########.fr       */
+/*   Updated: 2019/05/09 18:02:09 by magicwartho      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ int				add_token(char *content, size_t size, t_token_type type,
 	new->size = size;
 	new->type = type;
 	new->next = NULL;
+	new->line = g_line;
 	if (!(last = last_token(head)))
 		return (0);
 	last->next = new;
@@ -95,7 +96,7 @@ void			print_tokens(t_token *head)
 	head = head->next;
 	while (head)
 	{
-		ft_printf("<\033[1m%s\033[0m [\033[31m%s\033[0m]> ", head->content, definitions[head->type]);
+		ft_printf("<\033[1m%s\033[0m [\033[31m%s\033[0m]>\n", head->content, definitions[head->type]);
 		head = head->next;
 	}
 	write(1, "\n", 1);

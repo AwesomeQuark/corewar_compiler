@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   asm.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
+/*   By: magicwarthog <magicwarthog@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/07 19:26:11 by conoel            #+#    #+#             */
-/*   Updated: 2019/05/08 17:48:28 by conoel           ###   ########.fr       */
+/*   Updated: 2019/05/09 17:41:55 by magicwartho      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,5 +24,6 @@
 int		parse(t_token *head);
 int		transcribe(t_token *head);
 int		is_instruction(t_token *token);
+int     is_parameter(t_token *token);
 
 #endif

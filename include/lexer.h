@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
+/*   By: magicwarthog <magicwarthog@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/07 17:14:29 by conoel            #+#    #+#             */
-/*   Updated: 2019/05/08 18:20:22 by conoel           ###   ########.fr       */
+/*   Updated: 2019/05/09 17:57:30 by magicwartho      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 
 # include "haflib.h"
 # include "op.h"
+
+extern int	g_line;
 
 typedef enum
 {
@@ -55,6 +57,7 @@ typedef struct s_token
 	char*			content;
 	size_t			size;
 	t_token_type	type;
+	int				line;
 }				t_token;
 
 

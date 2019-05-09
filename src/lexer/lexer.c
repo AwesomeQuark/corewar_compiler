@@ -1,15 +1,18 @@
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
+/*   By: magicwarthog <magicwarthog@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/04/09 15:52:03 by conoel            #+#    #+#             */
-/*   Updated: 2019/05/08 15:41:41 by conoel           ###   ########.fr       */
+/*   Created: 2019/05/08 15:41:41 by conoel            #+#    #+#             */
+/*   Updated: 2019/05/09 17:59:21 by magicwartho      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
+
+int	g_line = 1;
 
 static t_token_def g_tokens[] =
 	{
@@ -36,6 +39,8 @@ static int			handle_escape(t_token *head, char **file,
 {
 	if (**file == ' ' || **file == '\t' || **file == '\n' || **file == SEPARATOR_CHAR)
 	{
+		if (**file == '\n')
+			g_line++;
 		if (*last_token != *file)
 			add_token(*last_token, *file - *last_token, STRING, head);
 		if (**file == SEPARATOR_CHAR)
