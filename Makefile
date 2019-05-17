@@ -20,17 +20,19 @@ AUTEUR =		"conoel"
 ###### SOURCES #######
 
 SRC_NAME =		main.c\
-			utils.c\
+				utils.c\
 				$(LEXER)\
 				$(PARSER)
 
 LEXER_SRC =		lexer.c\
-				token_utils.c
+				token_utils.c\
+				string_variants.c\
+				print_tokens.c
 LEXER_DIR =		lexer/
 LEXER =			${addprefix $(LEXER_DIR), $(LEXER_SRC)}
 
 PARSER_SRC =		parser.c\
-					check.c
+					op.c
 PARSER_DIR =		parser/
 PARSER =		${addprefix $(PARSER_DIR), $(PARSER_SRC)}
 
@@ -49,7 +51,7 @@ ALL_OBJ_DIR =	$(OBJ_DIR)$(LEXER_DIR)\
 HEADER_DIR =	./include/
 HEADER_NAME =	asm.h\
 				lexer.h\
-				parser.h
+				op.h
 HEADER =		${addprefix $(HEADER_DIR), $(HEADER_NAME)}
 
 #######  LIBS  ########

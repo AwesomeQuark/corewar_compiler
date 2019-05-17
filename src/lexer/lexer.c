@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magicwarthog <magicwarthog@student.42.f    +#+  +:+       +#+        */
+/*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/08 15:41:41 by conoel            #+#    #+#             */
-/*   Updated: 2019/05/09 17:59:21 by magicwartho      ###   ########.fr       */
+/*   Updated: 2019/05/17 13:50:37 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static int			handle_escape(t_token *head, char **file,
 		if (*last_token != *file)
 			add_token(*last_token, *file - *last_token, STRING, head);
 		if (**file == SEPARATOR_CHAR)
-			add_token(",", 1, SEPARATOR, head);//changer par macro SEparator_char
+			add_token(",", 1, SEPARATOR, head);
 		*file += 1;
 		*last_token = *file;
 		return (1);

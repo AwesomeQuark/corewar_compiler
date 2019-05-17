@@ -3,14 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   token_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magicwarthog <magicwarthog@student.42.f    +#+  +:+       +#+        */
+/*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 15:28:10 by conoel            #+#    #+#             */
-/*   Updated: 2019/05/09 18:02:09 by magicwartho      ###   ########.fr       */
+/*   Updated: 2019/05/17 14:11:14 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
+
+static t_token	*before_last_token(t_token *head)
+{
+	if (!head || !head->next)
+		return (NULL);
+	while (head->next->next != NULL)
+		head = head->next;
+	return (head);
+}
 
 static t_token	*last_token(t_token *head)
 {
@@ -32,20 +41,21 @@ int				add_token(char *content, size_t size, t_token_type type,
 	new->content = ft_memdup(content, size);
 	new->size = size;
 	new->type = type;
+	new->type = type;
 	new->next = NULL;
 	new->line = g_line;
 	if (!(last = last_token(head)))
 		return (0);
-	last->next = new;
 	if (type == STRING)
+		new->type = identify_string(new);
+	if (new->type == STRING && (last->type == NAME || last->type == COMMENT))
 	{
-		if (size > 0 && content[size - 1] == LABEL_CHAR)
-			new->type = LABEL;
-		else if (content[0] == 'r')
-			new->type = REG;
-		else if (content[0] == DIRECT_CHAR)
-			new->type = DIRECT;
+		new->type = last->type;
+		last = before_last_token(head);
+		last->next->next = NULL;
+		release_tokens(last->next);
 	}
+	last->next = new;
 	return (1);
 }
 
@@ -63,43 +73,6 @@ void			release_tokens(t_token *head)
 		head = head->next;
 		free(tmp);
 	}
-}
-
-static char *definitions[] =
-{
-	"START",
-	"LIVE",
-	"LD",
-	"ST",
-	"ADD",
-	"AND",
-	"OR",
-	"ZJMP",
-	"STI",
-	"FORK",
-	"LLD",
-	"LLDI",
-	"LFORK",
-	"AFF",
-	"LABEL",
-	"REG",
-	"DIRECT",
-	"STRING",
-	"SEPARATOR",
-	"NAME",
-	"COMMENT",
-	"EOF"
-};
-
-void			print_tokens(t_token *head)
-{
-	head = head->next;
-	while (head)
-	{
-		ft_printf("<\033[1m%s\033[0m [\033[31m%s\033[0m]>\n", head->content, definitions[head->type]);
-		head = head->next;
-	}
-	write(1, "\n", 1);
 }
 
 void skip_until_char(char **file, char **last_token, char c)

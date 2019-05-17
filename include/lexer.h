@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magicwarthog <magicwarthog@student.42.f    +#+  +:+       +#+        */
+/*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/07 17:14:29 by conoel            #+#    #+#             */
-/*   Updated: 2019/05/09 17:57:30 by magicwartho      ###   ########.fr       */
+/*   Updated: 2019/05/17 13:49:55 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,12 @@ typedef enum
 	LD,
 	ST,
 	ADD,
+	SUB,
 	AND,
 	OR,
+	XOR,
 	ZJMP,
+	LDI,
 	STI,
 	FORK,
 	LLD,
@@ -37,6 +40,7 @@ typedef enum
 	LABEL,
 	REG,
 	DIRECT,
+	INDIRECT,
 	STRING,
 	SEPARATOR,
 	NAME,
@@ -60,6 +64,14 @@ typedef struct s_token
 	int				line;
 }				t_token;
 
+typedef struct	s_op
+{
+	t_token_type	type;
+	int				argc;
+	int				args[4];
+	int				opcode;
+}				t_op;
+
 
 /*
 **	EXTERNAL
@@ -73,5 +85,6 @@ void			release_tokens(t_token *head);
 */
 int				add_token(char *content, size_t size, t_token_type type, t_token *head);
 void			skip_until_char(char **file, char **last_token, char c);
+t_token_type	identify_string(t_token *token);
 
 #endif

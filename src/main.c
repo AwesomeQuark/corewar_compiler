@@ -6,7 +6,7 @@
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/07 19:24:21 by conoel            #+#    #+#             */
-/*   Updated: 2019/05/08 18:08:14 by conoel           ###   ########.fr       */
+/*   Updated: 2019/05/17 14:47:16 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,13 +52,10 @@ int		main(int argc, char **argv)
 	}
 	if (parse(token_head) == FALSE)
 	{
+		release_tokens(token_head);
 		ft_putstr_fd("Error: parsing error (main, main.c)\n", 2);
 		return(EXIT_FAILURE);
 	}
-/*	if (transcribe(instructions) == FALSE)
-	{
-		ft_putstr_fd("Error: compilation failure (main, main.c)\n", 2);
-		return (EXIT_FAILURE);
-	}*/
+	release_tokens(token_head);
 	return (EXIT_SUCCESS);
 }
