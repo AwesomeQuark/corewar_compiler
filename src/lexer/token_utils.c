@@ -6,7 +6,7 @@
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 15:28:10 by conoel            #+#    #+#             */
-/*   Updated: 2019/05/17 14:11:14 by conoel           ###   ########.fr       */
+/*   Updated: 2019/05/17 16:55:54 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static t_token	*before_last_token(t_token *head)
 	if (!head || !head->next)
 		return (NULL);
 	while (head->next->next != NULL)
-		head = head->next;
+		next_token(&head);;
 	return (head);
 }
 
@@ -26,7 +26,7 @@ static t_token	*last_token(t_token *head)
 	if (!head)
 		return (NULL);
 	while (head->next != NULL)
-		head = head->next;
+		next_token(&head);;
 	return (head);
 }
 
@@ -41,16 +41,15 @@ int				add_token(char *content, size_t size, t_token_type type,
 	new->content = ft_memdup(content, size);
 	new->size = size;
 	new->type = type;
-	new->type = type;
 	new->next = NULL;
 	new->line = g_line;
 	if (!(last = last_token(head)))
 		return (0);
-	if (type == STRING)
+	if (new->type == STRING && (last->type != COMMENT_CMD && last->type != NAME_CMD))
 		new->type = identify_string(new);
-	if (new->type == STRING && (last->type == NAME || last->type == COMMENT))
+	if (type == STRING && (last->type == NAME_CMD || last->type == COMMENT_CMD))
 	{
-		new->type = last->type;
+		new->type = last->type - 2;
 		last = before_last_token(head);
 		last->next->next = NULL;
 		release_tokens(last->next);
@@ -70,15 +69,14 @@ void			release_tokens(t_token *head)
 		if (head->content)
 			free(head->content);
 		tmp = head;
-		head = head->next;
+		next_token(&head);;
 		free(tmp);
 	}
 }
 
-void skip_until_char(char **file, char **last_token, char c)
+void		next_token(t_token **current)
 {
-	*last_token += 1;
-	*file += 1;
-	while (**file != '\0' && **file != c)
-		*file += 1;
+	if (!current || !*current)
+		return ;
+	*current = (*current)->next;
 }

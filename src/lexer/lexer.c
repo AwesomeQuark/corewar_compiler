@@ -6,7 +6,7 @@
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/08 15:41:41 by conoel            #+#    #+#             */
-/*   Updated: 2019/05/17 13:50:37 by conoel           ###   ########.fr       */
+/*   Updated: 2019/05/17 16:39:24 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,19 +20,30 @@ static t_token_def g_tokens[] =
 		{"ld", 2, LD},
 		{"st", 2, ST},
 		{"add", 3, ADD},
+		{"sub", 3, SUB},
 		{"and", 3, AND},
 		{"or", 2, OR},
+		{"xor", 3, XOR},
 		{"zjmp", 4, ZJMP},
+		{"ldi", 3, LDI},
 		{"sti", 3, STI},
 		{"fork", 4, FORK},
 		{"lld", 3, LLD},
 		{"lldi", 4, LLDI},
 		{"lfork", 5, LFORK},
 		{"aff", 3, AFF},
-		{NAME_CMD_STRING, sizeof(NAME_CMD_STRING) - 1, NAME},
-		{COMMENT_CMD_STRING, sizeof(COMMENT_CMD_STRING) - 1, COMMENT},
+		{NAME_CMD_STRING, sizeof(NAME_CMD_STRING) - 1, NAME_CMD},
+		{COMMENT_CMD_STRING, sizeof(COMMENT_CMD_STRING) - 1, COMMENT_CMD},
 		{NULL, 0, EOF_}
 };
+
+void skip_until_char(char **file, char **last_token, char c)
+{
+	*last_token += 1;
+	*file += 1;
+	while (**file != '\0' && **file != c)
+		*file += 1;
+}
 
 static int			handle_escape(t_token *head, char **file,
 	char **last_token)
@@ -79,7 +90,7 @@ static t_token_def	*search_token_type(char **file, char **last_token,
 			&& ((*file)[g_tokens[i].size] == ' '
 			|| (*file)[g_tokens[i].size] == '\n'
 			|| (*file)[g_tokens[i].size] == SEPARATOR_CHAR
-			|| (*file)[g_tokens[i].size] == 0)
+			|| (*file)[g_tokens[i].size] == '\0')
 			&& *last_token == *file)
 			return (&g_tokens[i]);
 		i++;

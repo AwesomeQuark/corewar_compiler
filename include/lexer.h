@@ -6,7 +6,7 @@
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/07 17:14:29 by conoel            #+#    #+#             */
-/*   Updated: 2019/05/17 13:49:55 by conoel           ###   ########.fr       */
+/*   Updated: 2019/05/17 16:30:00 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ typedef enum
 	SEPARATOR,
 	NAME,
 	COMMENT,
+	NAME_CMD,
+	COMMENT_CMD,
 	EOF_
 } t_token_type;
 
@@ -79,6 +81,7 @@ typedef struct	s_op
 t_token			*lexer(char *line);
 void			print_tokens(t_token *head);
 void			release_tokens(t_token *head);
+void			next_token(t_token **current);
 
 /*
 **	INTERNAL
