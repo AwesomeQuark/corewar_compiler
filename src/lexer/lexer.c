@@ -90,7 +90,8 @@ static t_token_def	*search_token_type(char **file, char **last_token,
 			&& ((*file)[g_tokens[i].size] == ' '
 			|| (*file)[g_tokens[i].size] == '\n'
 			|| (*file)[g_tokens[i].size] == SEPARATOR_CHAR
-			|| (*file)[g_tokens[i].size] == '\0')
+			|| (*file)[g_tokens[i].size] == '\0'
+			|| (*file)[g_tokens[i].size] == '\t')
 			&& *last_token == *file)
 			return (&g_tokens[i]);
 		i++;

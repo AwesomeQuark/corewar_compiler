@@ -49,7 +49,8 @@ t_token_type identify_string(t_token *token)
 {
 	t_token_type type;
 	size_t	ret;
-	
+
+	printf("STRING: %s\n",token->content)	;
 	if (token->size > 0 && token->content[token->size - 1] == LABEL_CHAR)
 	{
 		if ((ret = is_label(token->content, LABEL_CHARS)) != token->size - 1)
@@ -65,6 +66,9 @@ t_token_type identify_string(t_token *token)
 	else if (token->content[0] == LABEL_CHAR || is_num(token->content))
 		type = INDIRECT;
 	else
-		type = token->type;
+	{
+		printf("Yes !\n");
+		type = STRING;
+	}
 	return (type);
 }

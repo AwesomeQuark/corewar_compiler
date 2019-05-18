@@ -40,7 +40,7 @@ static t_token *scan_instruction(t_op op, t_token *head)
 	size_t	i;
 
 	i = 0;
-	ft_printf("%s%sOperation:%s %s%-*s%s  [ ", "\033[4m", BOLD, DEF, GREEN, 7, head->content, DEF);
+	ft_printf("%s%sOperation:%s %s%-*s%s  [", "\033[4m", BOLD, DEF, GREEN, 7, head->content, DEF);
 	next_token(&head);;
 	while (op.argc)
 	{

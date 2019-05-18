@@ -45,7 +45,7 @@ int				add_token(char *content, size_t size, t_token_type type,
 	new->line = g_line;
 	if (!(last = last_token(head)))
 		return (0);
-	if (new->type == STRING && (last->type != COMMENT_CMD && last->type != NAME_CMD))
+	if (type == STRING && (last->type != COMMENT_CMD && last->type != NAME_CMD))
 		new->type = identify_string(new);
 	if (type == STRING && (last->type == NAME_CMD || last->type == COMMENT_CMD))
 	{
