@@ -21,6 +21,7 @@ AUTEUR =		"conoel"
 
 SRC_NAME =		main.c\
 				utils.c\
+				compile.c\
 				$(LEXER)\
 				$(PARSER)
 
@@ -32,7 +33,8 @@ LEXER_DIR =		lexer/
 LEXER =			${addprefix $(LEXER_DIR), $(LEXER_SRC)}
 
 PARSER_SRC =		parser.c\
-					op.c
+					op.c\
+					instruction_utils.c
 PARSER_DIR =		parser/
 PARSER =		${addprefix $(PARSER_DIR), $(PARSER_SRC)}
 
@@ -51,7 +53,8 @@ ALL_OBJ_DIR =	$(OBJ_DIR)$(LEXER_DIR)\
 HEADER_DIR =	./include/
 HEADER_NAME =	asm.h\
 				lexer.h\
-				op.h
+				op.h\
+				parser.h
 HEADER =		${addprefix $(HEADER_DIR), $(HEADER_NAME)}
 
 #######  LIBS  ########

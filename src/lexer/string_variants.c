@@ -6,7 +6,7 @@
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/16 16:10:21 by conoel            #+#    #+#             */
-/*   Updated: 2019/05/17 16:56:05 by conoel           ###   ########.fr       */
+/*   Updated: 2019/05/20 11:40:03 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ static int			is_num(char *str)
 {
 	if (!str)
 		return (0);
+	if (*str == '-')
+		str++;
 	while (*str)
 	{
 		if (!ft_isdigit(*str))
@@ -50,7 +52,6 @@ t_token_type identify_string(t_token *token)
 	t_token_type type;
 	size_t	ret;
 
-	printf("STRING: %s\n",token->content)	;
 	if (token->size > 0 && token->content[token->size - 1] == LABEL_CHAR)
 	{
 		if ((ret = is_label(token->content, LABEL_CHARS)) != token->size - 1)

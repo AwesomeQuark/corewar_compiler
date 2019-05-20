@@ -6,13 +6,30 @@
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/09 17:27:34 by magicwartho       #+#    #+#             */
-/*   Updated: 2019/05/17 16:27:15 by conoel           ###   ########.fr       */
+/*   Updated: 2019/05/20 14:35:32 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
 
-extern t_op g_op_tab[17];
+static void		add_instruction(t_op op, t_token *head)
+{
+	t_instruction	*new;
+	int				i;
+
+	i = 0;
+	new = get_instructions(NULL);
+	new = last_instruction(new);
+	new_instruction(new, head->type, op.argc);
+	new = new->next;
+	while (i < op.argc)
+	{
+		head = head->next;
+		new->args[i] = head;
+		head = head->next;
+		i++;
+	}
+}
 
 static int		skip_start(t_token **head)
 {
@@ -21,16 +38,17 @@ static int		skip_start(t_token **head)
 	current = *head;
 	next_token(&current);
 	if (current->type != NAME)
-		return (return_("Error: Missing name marker"));
+	{
+		ft_printf("%sError:%s Missing name marker", RED, DEF);
+		return (FALSE);
+	}
 	next_token(&current);
-//	if (current->type != STRING)
-//		return (return_("Error: Missing name content"));
-//	next_token(&current);
 	if (current->type != COMMENT)
-		return (return_("Error: Missing comment marker"));
+	{
+		ft_printf("%sError:%s Missing comment marker", RED, DEF);
+		return (FALSE);
+	}
 	next_token(&current);
-//	if (current->type != STRING)
-//		return (return_("Error: Missing comment content"));
 	*head = current;
 	return (TRUE);
 }
@@ -65,32 +83,44 @@ static t_token *scan_instruction(t_op op, t_token *head)
 	return (head);
 }
 
+static int	get_type(t_token *current)
+{
+	int		i;
+
+	i = 0;
+	while (g_op_tab[i].type != current->type)
+	{
+		if (i == 17)
+		{
+			ft_printf("%sError:%s Unexpected keyword \"%s\" [line %d]\n",
+				RED, DEF, current->content, current->line);
+			return (-1);
+		}
+		i++;
+	}
+	return (i);
+}
+
 int			parse(t_token *head)
 {
-	size_t	i;
 
+	t_token	*mem;
+	int		i;
+
+	get_instructions(new_instruction(NULL, START, 0));
 	if (!skip_start(&head))
 		return (FALSE);
 	while (head)
 	{
-		i = 0;
 		if (head->type == EOF_)
 			break ;
 		if (head->type != LABEL && head->type != NAME && head->type != COMMENT)
 		{
-			while (g_op_tab[i].type != head->type)
-			{
-				if (i == 17)
-				{
-					ft_printf("%sError:%s Unexpected keyword \"%s\" [line %d]\n",
-						RED, DEF, head->content, head->line);
-					return (FALSE);
-					i = 0;
-					next_token(&head);;
-				}
-				i++;
-			}
+			if ((i = get_type(head)) == -1)
+				return (FALSE);
+			mem = head;
 			head = scan_instruction(g_op_tab[i], head);
+			add_instruction(g_op_tab[i], mem);
 		}
 		if (head)
 			next_token(&head);;
