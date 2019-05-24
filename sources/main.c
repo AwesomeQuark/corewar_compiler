@@ -6,7 +6,7 @@
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/07 19:24:21 by conoel            #+#    #+#             */
-/*   Updated: 2019/05/20 19:26:32 by conoel           ###   ########.fr       */
+/*   Updated: 2019/05/23 13:55:20 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int		main(int argc, char **argv)
 	}
 	if ((token_head = get_tokens(argv[1])) == NULL)
 	{
-		ft_putstr_fd("Error: cannot parse the file (main, main.c)\n", 2);
+		ft_putstr_fd("Error: lexer failure (main, main.c)\n", 2);
 		return (EXIT_FAILURE);
 	}
 	if (parse(token_head) == FALSE)

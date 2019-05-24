@@ -1,25 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   compile.c                                          :+:      :+:    :+:   */
+/*   add_line.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/20 11:27:46 by conoel            #+#    #+#             */
-/*   Updated: 2019/05/20 19:00:00 by conoel           ###   ########.fr       */
+/*   Created: 2019/05/23 13:49:22 by conoel            #+#    #+#             */
+/*   Updated: 2019/05/24 17:44:20 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
-
-static char	*file_name(char *name_s)
-{
-	char	*ret;
-
-	name_s[ft_strlen(name_s) - 2] = '\0';
-	ret = concat("./", name_s, ".cor");
-	return (ret);
-}
 
 static int	get_type(t_token_type type)
 {
@@ -68,9 +59,9 @@ static char	ocp(t_token_type param, int i)
 	return (ocp);
 }
 
-static void	add_line(int fd, t_instruction *actual)
+void	add_line(int fd, t_instruction *actual)
 {
-	char	buff[512];
+	char	buff[64];
 	int		len;
 	int		i;
 	int		type;
@@ -87,48 +78,10 @@ static void	add_line(int fd, t_instruction *actual)
 	}
 	while (i < actual->argc)
 	{
-		param_encoding(actual->args[i], &len);
+		buff[len++] = param_encoding(actual->args[i], &len);
 		if (g_op_tab[type].ocp)
 			buff[1] += ocp(actual->args[i]->type, i);
 		i++;
 	}
 	write(fd, buff, len);
-}
-
-static void	header(t_token *head, int fd)
-{
-	header_t	*header;
-
-	if (!(header = malloc(sizeof( header_t))))
-		return ;
-	ft_bzero(header, sizeof(header_t));
-	header->magic = COREWAR_EXEC_MAGIC;
-	next_token(&head);
-	ft_strcpy(header->prog_name, head->content);
-	next_token(&head);
-	ft_strcpy(header->comment, head->content);
-	write(fd, header, sizeof(header_t));
-}
-
-int		compile(t_token *head, char *file_name_s)
-{
-	t_instruction	*code;
-	int		fd;
-	char	*tmp;
-
-	if (!(fd = open(tmp , O_CREAT | O_WRONLY | O_TRUNC, 0644)))
-		return (return_("Error: failed to create .cor file (compile, compile.c"));
-	header(head, fd);
-	head = NULL;
-	code = get_instructions(NULL);
-	code = code->next;
-	tmp = file_name(file_name_s);
-	free(tmp);
-	while (code)
-	{
-		add_line(fd, code);
-		code = code->next;
-	}
-	release_instructions();
-	return (TRUE);
 }

@@ -21,10 +21,10 @@ AUTEUR =		"conoel"
 
 SRC_NAME =		main.c\
 				utils.c\
-				compile.c\
 				$(LEXER)\
-				$(PARSER)
-
+				$(PARSER)\
+				$(COMPILER)
+#sub-directories
 LEXER_SRC =		lexer.c\
 				token_utils.c\
 				string_variants.c\
@@ -32,21 +32,27 @@ LEXER_SRC =		lexer.c\
 LEXER_DIR =		lexer/
 LEXER =			${addprefix $(LEXER_DIR), $(LEXER_SRC)}
 
-PARSER_SRC =		parser.c\
+	PARSER_SRC =		parser.c\
 					op.c\
 					instruction_utils.c
-PARSER_DIR =		parser/
-PARSER =		${addprefix $(PARSER_DIR), $(PARSER_SRC)}
+	PARSER_DIR =		parser/
+	PARSER =			${addprefix $(PARSER_DIR), $(PARSER_SRC)}
 
-SRC_DIR =		./src/
-SRC =			${addprefix $(SRC_DIR), $(SRC_NAME)}
-
+	COMPILER_SRC =		compile.c\
+					add_line.c
+	COMPILER_DIR =		compile/
+	COMPILER =			${addprefix $(COMPILER_DIR), $(COMPILER_SRC)}
+	#main sources
+	SRC_DIR =			./sources/
+	SRC =				${addprefix $(SRC_DIR), $(SRC_NAME)}
+#objects
 OBJ_NAME =		$(SRC_NAME:.c=.o)
-OBJ_DIR =		./obj/
+OBJ_DIR =		./objects/
 OBJ =			${addprefix $(OBJ_DIR), $(OBJ_NAME)}
-
-ALL_OBJ_DIR =	$(OBJ_DIR)$(LEXER_DIR)\
-				$(OBJ_DIR)$(PARSER_DIR)
+#object sub-directories
+	ALL_OBJ_DIR =	$(OBJ_DIR)$(LEXER_DIR)\
+					$(OBJ_DIR)$(PARSER_DIR)\
+					$(OBJ_DIR)$(COMPILER_DIR)
 
 ###### HEADERS ########
 
