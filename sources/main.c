@@ -6,7 +6,7 @@
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/07 19:24:21 by conoel            #+#    #+#             */
-/*   Updated: 2019/05/23 13:55:20 by conoel           ###   ########.fr       */
+/*   Updated: 2019/06/05 19:52:36 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,5 +63,7 @@ int		main(int argc, char **argv)
 		return(EXIT_FAILURE);
 	}
 	release_tokens(token_head);
+	ft_printf("\n");
+	system("hexdump utils/test.cor");
 	return (EXIT_SUCCESS);
 }

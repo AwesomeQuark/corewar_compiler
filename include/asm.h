@@ -6,7 +6,7 @@
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/07 19:26:11 by conoel            #+#    #+#             */
-/*   Updated: 2019/05/23 13:54:39 by conoel           ###   ########.fr       */
+/*   Updated: 2019/05/25 13:23:56 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int		parse(t_token *head);
 int		transcribe(t_token *head);
 int		compile(t_token *head, char *file_name_s);
 
-void	add_line(int fd, t_instruction *actual);
+int		add_line(int fd, t_instruction *actual);
 
 /*
 **	UTILS

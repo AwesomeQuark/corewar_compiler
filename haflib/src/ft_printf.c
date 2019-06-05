@@ -6,7 +6,7 @@
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/12 09:15:05 by conoel            #+#    #+#             */
-/*   Updated: 2019/02/13 20:17:16 by conoel           ###   ########.fr       */
+/*   Updated: 2019/05/25 12:57:06 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static void	init(t_flag *all, int start)
 		all->total_size = 0;
 		all->buffer_index = 0;
 		all->str_index = 0;
-		ft_bzero2(all->buffer, BUFF + 1);
+		ft_bzero(all->buffer, BUFF + 1);
 	}
 	all->intflags = 0;
 	all->type = 0;

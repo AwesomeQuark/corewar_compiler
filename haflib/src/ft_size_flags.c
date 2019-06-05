@@ -6,7 +6,7 @@
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 18:56:53 by conoel            #+#    #+#             */
-/*   Updated: 2019/02/13 20:17:16 by conoel           ###   ########.fr       */
+/*   Updated: 2019/05/25 12:57:44 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void		str_flags(char *ret, t_flag *all)
 	i = 0;
 	prec = all->precision;
 	if (ret)
-		size = ft_strlen2(ret);
+		size = ft_strlen(ret);
 	else
 		size = 6;
 	prec <= -1 ? prec = size : 0;

@@ -6,7 +6,7 @@
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/16 16:10:21 by conoel            #+#    #+#             */
-/*   Updated: 2019/05/20 11:40:03 by conoel           ###   ########.fr       */
+/*   Updated: 2019/05/25 13:24:25 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,9 +67,6 @@ t_token_type identify_string(t_token *token)
 	else if (token->content[0] == LABEL_CHAR || is_num(token->content))
 		type = INDIRECT;
 	else
-	{
-		printf("Yes !\n");
 		type = STRING;
-	}
 	return (type);
 }

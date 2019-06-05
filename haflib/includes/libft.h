@@ -6,7 +6,7 @@
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/10 18:22:48 by conoel            #+#    #+#             */
-/*   Updated: 2019/04/27 23:02:43 by conoel           ###   ########.fr       */
+/*   Updated: 2019/06/05 20:08:25 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 # define I all->str_index
 
 int					ft_atoi(const char *nptr);
+char				*ft_itoa_base(int n, int base);
 int					ft_isalnum(int c);
 int					ft_isalpha(int c);
 int					ft_isascii(int c);
@@ -82,7 +83,8 @@ void				*ft_bzero(void *s, size_t n);
 char				*ft_strdup(const char *s);
 char				*ft_memdup(const char *s, size_t size);
 void				print_int_str(int *tab, size_t len);
-
+char				ft_atoc(char *nb);
+short				ft_atos(char *nb);
 void				ft_putchar(char c);
 void				ft_putstr(char const *s);
 void				ft_putendl(char const *s);
@@ -113,14 +115,8 @@ typedef struct		s_flag
 	char	zero;
 }					t_flag;
 
-void				*ft_memset2(void *s, int c, size_t n);
-void				ft_bzero2(char *s, size_t n);
-int					ft_strcmp2(const char *s1, const char *s2);
-char				*ft_strdup2(const char *s);
-size_t				ft_strlen2(const char *s);
-char				*ft_itoa2(int n);
 int					ft_atoi2(char *s, t_flag *all);
-void				ft_strrev2(char *str);
+void				ft_strrev(char *str);
 
 /*
 **itoabu stands for : integer to array base unsigned

@@ -6,7 +6,7 @@
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/23 13:49:22 by conoel            #+#    #+#             */
-/*   Updated: 2019/05/24 17:44:20 by conoel           ###   ########.fr       */
+/*   Updated: 2019/06/05 22:50:40 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,21 +26,70 @@ static int	get_type(t_token_type type)
 	return (i);
 }
 
-static char	*param_encoding(t_token *param, int	*len)
+int		ft_natoi_hex(char *nb, int n)
 {
-	char	*ret;
+	int	i;
+	int	tot;
+	int	signe;
 
-	if (!(ret = malloc(sizeof(char) * 5)))
-		return (NULL);
-	ft_bzero(ret, 5);
+	tot = 0;
+	i = 0;
+	if (nb[0] == '-')
+	{
+		i++;
+		signe = -1;
+	}
+	else
+		signe = 1;
+	while (nb[i] && i < n)
+	{
+		tot *= 16;
+		tot += (ft_isdigit(nb[i]) ? (nb[i] - '0') : (nb[i] - 'A'));
+		i++;
+	}
+	return (tot);
+}
+
+void		str_to_direct_param(char *param, int *len, char *str)
+{
+	int		nb;
+	char	*nb_hex;
+	int		nb_len;
+	int		i;
+
+	i = 0;
+	nb = ft_atoi(param);
+	nb_hex = ft_itoa_base(nb, 16);
+	nb_len = ft_strlen(nb_hex) / 2 + ft_strlen(nb_hex) % 2;
+	while (nb_len--)
+	{
+		str[*len] = 0;
+		*len += 1;
+	}
+	while (nb_hex[i] && i < 8)
+	{
+		str[*len] = ft_natoi_hex(nb_hex, 2);
+		i += 2;
+		*len += 1;
+	}
+}
+
+static void	param_encoding(t_token *param, int *len, char *str)
+{
 	if (param->type == REG)
-		ret[0] = ft_atoi(&(param->content[1]));
-	if (param->type == DIRECT)
-		ret[0] = 42;
-	if(param->type == INDIRECT)
-		ret[0] = 43;
-	len++;
-	return (ret);
+	{
+		str[*len] = param->content[1] - '0';
+		*len += 1;
+	}
+	if (param->type == DIRECT)  //TODO
+	{
+		str_to_direct_param(param->content, len, str);
+	}
+	if(param->type == INDIRECT) //TODO
+	{
+		str[*len] = 42;
+		*len += 1;
+	}
 }
 
 static char	ocp(t_token_type param, int i)
@@ -59,14 +108,16 @@ static char	ocp(t_token_type param, int i)
 	return (ocp);
 }
 
-void	add_line(int fd, t_instruction *actual)
+int			add_line(int fd, t_instruction *actual)
 {
-	char	buff[64];
+	char	*buff;
 	int		len;
 	int		i;
 	int		type;
 
-	ft_bzero(buff, 512);
+	if (!(buff = malloc(64)))
+		return (FALSE);
+	ft_bzero(buff, 64);
 	i = 0;
 	len = 1;
 	type = get_type(actual->type);
@@ -78,10 +129,11 @@ void	add_line(int fd, t_instruction *actual)
 	}
 	while (i < actual->argc)
 	{
-		buff[len++] = param_encoding(actual->args[i], &len);
+		param_encoding(actual->args[i], &len, buff);
 		if (g_op_tab[type].ocp)
 			buff[1] += ocp(actual->args[i]->type, i);
 		i++;
+		
 	}
-	write(fd, buff, len);
+	return (write(fd, buff, len));
 }

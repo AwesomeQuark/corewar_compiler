@@ -1,26 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup2.c                                       :+:      :+:    :+:   */
+/*   ft_atoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/09 10:45:43 by conoel            #+#    #+#             */
-/*   Updated: 2019/04/19 14:44:16 by conoel           ###   ########.fr       */
+/*   Created: 2019/05/25 13:02:21 by conoel            #+#    #+#             */
+/*   Updated: 2019/05/25 13:02:45 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strdup2(const char *s)
+char	ft_atoc(char *nb)
 {
-	int		index;
-	char	*end;
+	char	ret;
+	int		sign;
 
-	index = ft_strlen2(s) + 1;
-	if (!(end = (char *)malloc(sizeof(char) * (index))))
+	ret = 0;
+	if (!nb || *nb == '\0')
 		return (0);
-	while (--index >= 0)
-		end[index] = s[index];
-	return (end);
+	if (*nb == '-')
+	{
+		sign = -1;
+		nb++;
+	}
+	else
+		sign = 0;
+	while (*nb && ft_isdigit(*nb))
+	{
+		ret = ret * 10;
+		ret += *nb + '0';
+		nb++;
+	}
+	return (ret);
 }

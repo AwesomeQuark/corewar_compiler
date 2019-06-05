@@ -6,7 +6,7 @@
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/17 12:34:16 by conoel            #+#    #+#             */
-/*   Updated: 2019/02/13 20:17:16 by conoel           ###   ########.fr       */
+/*   Updated: 2019/05/25 12:58:05 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ static void			printer(t_flag *all, long long nb, int size, int p_i)
 	long long	nb_mem;
 
 	nb_mem = nb;
-	ft_bzero2(tmp, 50);
+	ft_bzero(tmp, 50);
 	minsize = all->minsize - get_size(nb, all);
 	while (all->minus && minsize-- > 1)
 		tmp[--size] = all->zero ? '0' : ' ';

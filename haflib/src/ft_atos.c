@@ -1,23 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memset2.c                                       :+:      :+:    :+:   */
+/*   ft_atos.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/09 10:43:12 by conoel            #+#    #+#             */
-/*   Updated: 2019/02/13 20:17:16 by conoel           ###   ########.fr       */
+/*   Created: 2019/05/25 12:43:32 by conoel            #+#    #+#             */
+/*   Updated: 2019/05/25 13:02:33 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_memset2(void *s, int c, size_t n)
+short	ft_atos(char *nb)
 {
-	char *s1;
+	short	ret;
+	int		sign;
 
-	s1 = (char *)s;
-	while (n--)
-		*s1++ = c;
-	return (s);
+	ret = 0;
+	if (!nb || *nb == '\0')
+		return (0);
+	if (*nb == '-')
+	{
+		sign = -1;
+		nb++;
+	}
+	else
+		sign = 0;
+	while (*nb && ft_isdigit(*nb))
+	{
+		ret = ret * 10;
+		ret += *nb + '0';
+		nb++;
+	}
+	return (ret);
 }

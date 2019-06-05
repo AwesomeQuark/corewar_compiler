@@ -6,7 +6,7 @@
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/11 11:53:38 by conoel            #+#    #+#             */
-/*   Updated: 2019/05/05 09:08:39 by conoel           ###   ########.fr       */
+/*   Updated: 2019/05/25 13:10:05 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,10 @@ static int		fill_tab(char *s, char **ret, char c)
 	int		j;
 	int		size;
 
-	i = 0;
+	i = -1;
 	j = 0;
 	size = 0;
-	while (s[i])
+	while (s[++i])
 	{
 		if (s[i] == c)
 		{
@@ -33,7 +33,6 @@ static int		fill_tab(char *s, char **ret, char c)
 			j++;
 			size = -1;
 		}
-		i++;
 		size++;
 	}
 	if (!(ret[j] = malloc(sizeof(char) * (size + 1))))

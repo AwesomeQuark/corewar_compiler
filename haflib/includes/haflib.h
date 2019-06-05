@@ -6,7 +6,7 @@
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/13 18:03:06 by conoel            #+#    #+#             */
-/*   Updated: 2019/05/20 16:41:16 by conoel           ###   ########.fr       */
+/*   Updated: 2019/06/05 20:08:39 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@
 # include <sys/uio.h>
 
 # include "garbage.h"
-# include "ft_printf.h"
 # include "quit.h"
 # include "ft_is.h"
 # include "colors.h"
@@ -28,22 +27,44 @@
 # define BUFF_SIZE 16
 # define ITER_MAX (INT_MAX / BUFF_SIZE)
 
-void				free_tab(char **tab);
+int					ft_printf(const char *str, ...);
 
+/*
+** PARSING
+*/
 char				*ft_strjoin(char const *s1, char const *s2);
 char				**ft_strsplit(char *s, char c);
-long long			ft_strtoll(char *ptr, size_t *index, int base);
 int					ft_getc(int fd);
 char				*get_the_file(int fd);
 
+/*
+** DISPLAY
+*/
 void				print_int_str(int *tab, size_t len);
 void				print_char_str(char c, size_t nb);
 void				ft_putstr_fd(char const *s, int fd);
 
+/*
+** MEMORY ALLOCATION
+*/
 void				*ft_bzero(void *s, size_t n);
 char				*ft_strdup(const char *s);
 char				*ft_memdup(const char *s, size_t size);
+
+void				free_tab(char **tab);
+
+/*
+** CONVERSIONS
+*/
 int					ft_atoi(const char *nptr);
+short				ft_atos(char *nb);
+char				ft_atoc(char *nb);
+long long			ft_strtoll(char *ptr, size_t *index, int base);
+char				*ft_itoa_base(int n, int base);
+
+/*
+** STRING BASICS
+*/
 size_t				ft_strlen(const char *s);
 int					ft_strcmp(const char *s1, const char *s2);
 int					ft_strncmp(const char *s1, const char *s2, size_t n);
@@ -51,10 +72,12 @@ int					ft_memcmp(const void *s1, const void *s2, size_t n);
 void				*ft_memchr(const void *s, int c, size_t n);
 char				*ft_strchr(const char *s, int c);
 char				*ft_strcat(char *s1, const char *s2);
-char				*ft_strncpy(char *dest, const char *src, size_t n);
-void				*ft_memmove(void *dest, const void *src, size_t n);
 char				*ft_strcpy(char *dest, const char *src);
+char				*ft_strncpy(char *dest, const char *src, size_t n);
 
+/*
+** MISC
+*/
 char				*concat(char *s1, char *s2, char *s3);
 
 #endif

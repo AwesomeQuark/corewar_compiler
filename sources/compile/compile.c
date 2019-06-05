@@ -6,7 +6,7 @@
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/20 11:27:46 by conoel            #+#    #+#             */
-/*   Updated: 2019/05/23 16:55:22 by conoel           ###   ########.fr       */
+/*   Updated: 2019/05/25 13:23:39 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,9 @@ static t_magic	reverse_bits(t_magic magic)
 	i = sizeof(t_magic);
 	while (i > 0)
 	{
-		printf("%x\n", magic);
-		tmp = tmp >> 8;
-		tmp += magic << 8;
-		magic = magic << 8;
+		tmp = tmp << 8;
+		tmp += magic & 0xFF;
+		magic = magic >> 8;
 		i--;
 	}
 	return (tmp);
@@ -62,7 +61,7 @@ int		compile(t_token *head, char *file_name_s)
 
 	tmp = file_name(file_name_s);
 	if (!(fd = open(tmp , O_CREAT | O_WRONLY | O_TRUNC, 0644)))
-		return (return_("Error: failed to create .cor file (compile, compile.c"));
+		return (return_("Error: failed to create .cor file (compile, compile.c)"));
 	header(head, fd);
 	head = NULL;
 	code = get_instructions(NULL);
@@ -71,7 +70,8 @@ int		compile(t_token *head, char *file_name_s)
 	free(tmp);
 	while (code)
 	{
-		add_line(fd, code);
+		if (!(add_line(fd, code)))
+			return (return_("/!\\ Compilation failure /!\\"));
 		code = code->next;
 	}
 	release_instructions();

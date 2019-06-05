@@ -6,7 +6,7 @@
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/23 23:07:50 by conoel            #+#    #+#             */
-/*   Updated: 2019/04/19 14:44:26 by conoel           ###   ########.fr       */
+/*   Updated: 2019/05/25 12:56:18 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,14 +53,14 @@ typedef struct	s_flag
 	char	zero;
 }				t_flag;
 
-void			*ft_memset2(void *s, int c, size_t n);
-void			ft_bzero2(char *s, size_t n);
-int				ft_strcmp2(const char *s1, const char *s2);
-char			*ft_strdup2(const char *s);
-size_t			ft_strlen2(const char *s);
-char			*ft_itoa2(int n);
+void			*ft_memset(void *s, int c, size_t n);
+void			ft_bzero(char *s, size_t n);
+int				ft_strcmp(const char *s1, const char *s2);
+char			*ft_strdup(const char *s);
+size_t			ft_strlen(const char *s);
+char			*ft_itoa(int n);
 int				ft_atoi2(char *s, t_flag *all);
-void			ft_strrev2(char *str);
+void			ft_strrev(char *str);
 
 /*
 **itoabu stands for : integer to array base unsigned
