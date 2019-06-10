@@ -6,7 +6,7 @@
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/23 13:49:22 by conoel            #+#    #+#             */
-/*   Updated: 2019/06/05 22:50:40 by conoel           ###   ########.fr       */
+/*   Updated: 2019/06/06 22:44:02 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,52 +26,30 @@ static int	get_type(t_token_type type)
 	return (i);
 }
 
-int		ft_natoi_hex(char *nb, int n)
+int			dec_to_hex(int nb)
 {
-	int	i;
-	int	tot;
-	int	signe;
+	int		tot;
 
 	tot = 0;
-	i = 0;
-	if (nb[0] == '-')
+	while (nb > 0)
 	{
-		i++;
-		signe = -1;
-	}
-	else
-		signe = 1;
-	while (nb[i] && i < n)
-	{
-		tot *= 16;
-		tot += (ft_isdigit(nb[i]) ? (nb[i] - '0') : (nb[i] - 'A'));
-		i++;
+		tot = tot * 16;
+		tot += nb / 16;
+		nb = nb / 16;
 	}
 	return (tot);
 }
 
 void		str_to_direct_param(char *param, int *len, char *str)
 {
-	int		nb;
-	char	*nb_hex;
-	int		nb_len;
-	int		i;
+	int	nb;
 
-	i = 0;
+	(void)len;
+	(void)str;
 	nb = ft_atoi(param);
-	nb_hex = ft_itoa_base(nb, 16);
-	nb_len = ft_strlen(nb_hex) / 2 + ft_strlen(nb_hex) % 2;
-	while (nb_len--)
-	{
-		str[*len] = 0;
-		*len += 1;
-	}
-	while (nb_hex[i] && i < 8)
-	{
-		str[*len] = ft_natoi_hex(nb_hex, 2);
-		i += 2;
-		*len += 1;
-	}
+	ft_printf("dec: %d\n");
+	nb = dec_to_hex(nb);
+	ft_printf("hex: %d\n", nb);
 }
 
 static void	param_encoding(t_token *param, int *len, char *str)
