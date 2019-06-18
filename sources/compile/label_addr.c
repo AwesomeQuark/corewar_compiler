@@ -1,39 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   label_addr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/17 13:55:33 by conoel            #+#    #+#             */
-/*   Updated: 2019/06/18 22:24:44 by conoel           ###   ########.fr       */
+/*   Created: 2019/06/14 10:38:09 by conoel            #+#    #+#             */
+/*   Updated: 2019/06/18 23:29:42 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
 
-int	is_instruction(t_token *token)
+int			get_label_addr(char *label_name)
 {
-	t_token_type t;
+	t_instruction	*head;
+	int				addr;
 
-	t = token->type;
-	if (t >= LIVE && t <= AFF)
-		return (TRUE);
-	else
-		return (FALSE);
-}
-
-int	is_parameter(t_token *token, int choice)
-{
-	t_token_type	t;
-
-	t = token->type;
-	if (t == DIRECT && choice & T_DIR)
-		return (TRUE);
-	if (t == REG && choice & T_REG)
-		return (TRUE);
-	if (t == INDIRECT && choice & T_IND)
-		return (TRUE);
-	else
-		return (FALSE);
+	addr = 0;
+	head = get_instructions(NULL);
+	while (head != NULL)
+	{
+		if (head->type == LABEL
+			&& ft_strcmp(head->args[0]->content, label_name) == 0)
+			return (addr);
+		addr += head->byte_len;
+		head = head->next;
+	}
+	return (0);
 }

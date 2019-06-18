@@ -6,7 +6,7 @@
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/07 19:24:21 by conoel            #+#    #+#             */
-/*   Updated: 2019/06/05 19:52:36 by conoel           ###   ########.fr       */
+/*   Updated: 2019/06/18 22:54:56 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,12 @@ static t_token *get_tokens(char *file_name)
 	return (token_head);
 }
 
+/*
+**	1) Remplissage des tokens avec "get_tokens()"
+**	2) Construction de l'AST t_instruction avec singletone dans "parse()"
+**	3) Compilation et ecriture du bytecode dans "compile()"
+*/
+
 int		main(int argc, char **argv)
 {
 	t_token		*token_head;
@@ -64,6 +70,5 @@ int		main(int argc, char **argv)
 	}
 	release_tokens(token_head);
 	ft_printf("\n");
-	system("hexdump utils/test.cor");
 	return (EXIT_SUCCESS);
 }

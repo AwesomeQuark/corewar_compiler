@@ -6,13 +6,13 @@
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/09 17:27:34 by magicwartho       #+#    #+#             */
-/*   Updated: 2019/05/20 14:35:32 by conoel           ###   ########.fr       */
+/*   Updated: 2019/06/18 23:17:56 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
 
-static void		add_instruction(t_op op, t_token *head)
+static int		add_instruction(t_op op, t_token *head)
 {
 	t_instruction	*new;
 	int				i;
@@ -20,7 +20,8 @@ static void		add_instruction(t_op op, t_token *head)
 	i = 0;
 	new = get_instructions(NULL);
 	new = last_instruction(new);
-	new_instruction(new, head->type, op.argc);
+	if (!(new_instruction(new, head->type, op.argc)))
+		return (FALSE);
 	new = new->next;
 	while (i < op.argc)
 	{
@@ -29,6 +30,9 @@ static void		add_instruction(t_op op, t_token *head)
 		head = head->next;
 		i++;
 	}
+	new->byte_len = line_byte_len(new);
+	ft_printf(" <%s%d%s>\n", RED, new->byte_len, DEF);
+	return (TRUE);
 }
 
 static int		skip_start(t_token **head)
@@ -39,13 +43,13 @@ static int		skip_start(t_token **head)
 	next_token(&current);
 	if (current->type != NAME)
 	{
-		ft_printf("%sError:%s Missing name marker", RED, DEF);
+		ft_printf("\n%sError:%s Missing name marker", RED, DEF);
 		return (FALSE);
 	}
 	next_token(&current);
 	if (current->type != COMMENT)
 	{
-		ft_printf("%sError:%s Missing comment marker", RED, DEF);
+		ft_printf("\n%sError:%s Missing comment marker", RED, DEF);
 		return (FALSE);
 	}
 	next_token(&current);
@@ -53,37 +57,37 @@ static int		skip_start(t_token **head)
 	return (TRUE);
 }
 
-static t_token *scan_instruction(t_op op, t_token *head)
+static t_token	*scan_instruction(t_op op, t_token *head)
 {
 	size_t	i;
 
 	i = 0;
-	ft_printf("%s%sOperation:%s %s%-*s%s  [", "\033[4m", BOLD, DEF, GREEN, 7, head->content, DEF);
-	next_token(&head);;
+	ft_printf("%s%sOperation:%s %s%-*s%s  [", "\033[4m", BOLD, DEF, GREEN,
+		7, head->content, DEF);
+	next_token(&head);
 	while (op.argc)
 	{
 		if (!is_parameter(head, op.args[i++]))
 		{
-			ft_printf("%sError:%s Expected argument, instead found \"%s\" [line %d]\n", RED, DEF, head->content, head->line);
+			ft_printf("\n%sError:%s Expected argument, found \"%s\" [l %d]\n"
+				, RED, DEF, head->content, head->line);
 			return (FALSE);
 		}
 		ft_printf(" %s%s%s ", YELLOW, head->content, DEF);
-		op.argc--;
-		if (op.argc)
-			next_token(&head);;
+		--op.argc ? next_token(&head) : 0;
 		if (op.argc && head->type != SEPARATOR)
 		{
-			ft_printf("%sError:%s Expected separator, instead found \"%s\" [line %d]\n", RED, DEF, head->content, head->line);
+			ft_printf("\n%sError:%s Expected separator, found \"%s\" [l %d]\n"
+				, RED, DEF, head->content, head->line);
 			return (FALSE);
 		}
-		else if (op.argc)
-			next_token(&head);;
+		op.argc ? next_token(&head) : 0;
 	}
-	ft_printf("]\n");
+	ft_printf("]");
 	return (head);
 }
 
-static int	get_type(t_token *current)
+static int		get_type(t_token *current)
 {
 	int		i;
 
@@ -92,7 +96,7 @@ static int	get_type(t_token *current)
 	{
 		if (i == 17)
 		{
-			ft_printf("%sError:%s Unexpected keyword \"%s\" [line %d]\n",
+			ft_printf("\n%sError:%s Unexpected keyword \"%s\" [line %d]\n",
 				RED, DEF, current->content, current->line);
 			return (-1);
 		}
@@ -101,7 +105,7 @@ static int	get_type(t_token *current)
 	return (i);
 }
 
-int			parse(t_token *head)
+int				parse(t_token *head)
 {
 
 	t_token	*mem;
@@ -120,10 +124,17 @@ int			parse(t_token *head)
 				return (FALSE);
 			mem = head;
 			head = scan_instruction(g_op_tab[i], head);
-			add_instruction(g_op_tab[i], mem);
+			if (!(add_instruction(g_op_tab[i], mem)))
+				return (FALSE);
+		}
+		if (head && head->type == LABEL)
+		{
+			add_label(last_instruction(get_instructions(NULL)), head);
+			ft_printf("%s%sLabel:%s %s%-*s%s\n", "\033[4m"
+				, BOLD, DEF, GREEN, 7, head->content, DEF);
 		}
 		if (head)
-			next_token(&head);;
+			next_token(&head);
 	}
 	return (TRUE);
 }

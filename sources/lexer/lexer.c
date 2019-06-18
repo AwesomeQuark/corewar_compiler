@@ -6,7 +6,7 @@
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/08 15:41:41 by conoel            #+#    #+#             */
-/*   Updated: 2019/05/17 16:39:24 by conoel           ###   ########.fr       */
+/*   Updated: 2019/06/14 11:04:37 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,124 +15,120 @@
 int	g_line = 1;
 
 static t_token_def g_tokens[] =
-	{
-		{"live", 4, LIVE},
-		{"ld", 2, LD},
-		{"st", 2, ST},
-		{"add", 3, ADD},
-		{"sub", 3, SUB},
-		{"and", 3, AND},
-		{"or", 2, OR},
-		{"xor", 3, XOR},
-		{"zjmp", 4, ZJMP},
-		{"ldi", 3, LDI},
-		{"sti", 3, STI},
-		{"fork", 4, FORK},
-		{"lld", 3, LLD},
-		{"lldi", 4, LLDI},
-		{"lfork", 5, LFORK},
-		{"aff", 3, AFF},
-		{NAME_CMD_STRING, sizeof(NAME_CMD_STRING) - 1, NAME_CMD},
-		{COMMENT_CMD_STRING, sizeof(COMMENT_CMD_STRING) - 1, COMMENT_CMD},
-		{NULL, 0, EOF_}
+{
+	{"live", 4, LIVE},
+	{"ld", 2, LD},
+	{"st", 2, ST},
+	{"add", 3, ADD},
+	{"sub", 3, SUB},
+	{"and", 3, AND},
+	{"or", 2, OR},
+	{"xor", 3, XOR},
+	{"zjmp", 4, ZJMP},
+	{"ldi", 3, LDI},
+	{"sti", 3, STI},
+	{"fork", 4, FORK},
+	{"lld", 3, LLD},
+	{"lldi", 4, LLDI},
+	{"lfork", 5, LFORK},
+	{"aff", 3, AFF},
+	{NAME_CMD_STRING, sizeof(NAME_CMD_STRING) - 1, NAME_CMD},
+	{COMMENT_CMD_STRING, sizeof(COMMENT_CMD_STRING) - 1, COMMENT_CMD},
+	{NULL, 0, EOF_}
 };
 
-void skip_until_char(char **file, char **last_token, char c)
+void				skip_until_char(char **f, char **last_token, char c)
 {
 	*last_token += 1;
-	*file += 1;
-	while (**file != '\0' && **file != c)
-		*file += 1;
+	*f += 1;
+	while (**f != '\0' && **f != c)
+		*f += 1;
 }
 
-static int			handle_escape(t_token *head, char **file,
+static int			handle_escape(t_token *head, char **f,
 	char **last_token)
 {
-	if (**file == ' ' || **file == '\t' || **file == '\n' || **file == SEPARATOR_CHAR)
+	if (**f == ' ' || **f == '\t' || **f == '\n' || **f == SEPARATOR_CHAR)
 	{
-		if (**file == '\n')
-			g_line++;
-		if (*last_token != *file)
-			add_token(*last_token, *file - *last_token, STRING, head);
-		if (**file == SEPARATOR_CHAR)
-			add_token(",", 1, SEPARATOR, head);
-		*file += 1;
-		*last_token = *file;
+		**f == '\n' ? g_line++ : 0;
+		if (*last_token != *f)
+			add_token(*last_token, *f - *last_token, STRING, head);
+		**f == SEPARATOR_CHAR ? add_token(",", 1, SEPARATOR, head) : 0;
+		*f += 1;
+		*last_token = *f;
 		return (1);
 	}
-	if (**file == '"')
-		skip_until_char(file, last_token, '\"');
-	else if (**file == '\'')
-		skip_until_char(file, last_token, '\'');
-	else if (**file == COMMENT_CHAR)
+	if (**f == '"')
+		skip_until_char(f, last_token, '\"');
+	else if (**f == '\'')
+		skip_until_char(f, last_token, '\'');
+	else if (**f == COMMENT_CHAR)
 	{
-		skip_until_char(file, last_token, '\n');
-		*last_token = *file;
+		skip_until_char(f, last_token, '\n');
+		*last_token = *f;
 	}
 	else
 		return (0);
-	if (*last_token != *file)
-		add_token(*last_token, *file - *last_token, STRING, head);
-	*file += 1;
-	*last_token = *file;
+	if (*last_token != *f)
+		add_token(*last_token, *f - *last_token, STRING, head);
+	*last_token = ++(*f);
 	return (1);
 }
 
-static t_token_def	*search_token_type(char **file, char **last_token,
+static t_token_def	*search_token_type(char **f, char **last_token,
 	t_token *head)
 {
 	size_t	i;
 
-	i = 0;
-	while (g_tokens[i].type != EOF_)
-	{
-		if (ft_strncmp(*file, g_tokens[i].content, g_tokens[i].size) == 0
-			&& ((*file)[g_tokens[i].size] == ' '
-			|| (*file)[g_tokens[i].size] == '\n'
-			|| (*file)[g_tokens[i].size] == SEPARATOR_CHAR
-			|| (*file)[g_tokens[i].size] == '\0'
-			|| (*file)[g_tokens[i].size] == '\t')
-			&& *last_token == *file)
+	i = -1;
+	while (g_tokens[++i].type != EOF_)
+		if (ft_strncmp(*f, g_tokens[i].content, g_tokens[i].size) == 0
+			&& ((*f)[g_tokens[i].size] == ' '
+			|| (*f)[g_tokens[i].size] == '\n'
+			|| (*f)[g_tokens[i].size] == SEPARATOR_CHAR
+			|| (*f)[g_tokens[i].size] == '\0'
+			|| (*f)[g_tokens[i].size] == '\t')
+			&& *last_token == *f)
 			return (&g_tokens[i]);
-		i++;
-	}
-	if (**file == SEPARATOR_CHAR)
+	if (**f == SEPARATOR_CHAR)
 	{
-		if (*last_token != *file)
-			add_token(*last_token, *file - *last_token, STRING, head);
-		add_token(*file, 1, SEPARATOR, head);
-		*file += 1;
-		*last_token = *file;
-		return (search_token_type(file, last_token, head));
+		if (*last_token != *f)
+			if (!(add_token(*last_token, *f - *last_token, STRING, head)))
+				return (NULL);
+		if (!(add_token(*f, 1, SEPARATOR, head)))
+			return (NULL);
+		*last_token = ++(*f);
+		return (search_token_type(f, last_token, head));
 	}
 	return (NULL);
 }
 
-int					lexer_main_loop(char *file, t_token *head)
+int					lexer_main_loop(char *f, t_token *head)
 {
 	t_token_def	*current;
-	char		*last_token_found;
+	char		*last_tok;
 
-	last_token_found = file;
-	while (file && *file)
+	last_tok = f;
+	while (f && *f)
 	{
-		if (handle_escape(head, &file, &last_token_found))
+		if (handle_escape(head, &f, &last_tok))
 			continue ;
-		if (!(current = search_token_type(&file, &last_token_found, head)))
+		if (!(current = search_token_type(&f, &last_tok, head)))
 		{
-			file++;
+			f++;
 			continue ;
 		}
-		if (last_token_found != file)
-			add_token(last_token_found, file - last_token_found, STRING, head);
-		file += current->size;
-		last_token_found = file;
+		if (last_tok != f)
+			if (!(add_token(last_tok, f - last_tok, STRING, head)))
+				return (0);
+		f += current->size;
+		last_tok = f;
 		if (!(add_token(current->content, current->size, current->type, head)))
 			return (0);
 	}
-	if (last_token_found != file && !(file - last_token_found == 1
-		&& *last_token_found == '\n'))
-		add_token(last_token_found, file - last_token_found, STRING, head);
+	if (last_tok != f && !(f - last_tok == 1 && *last_tok == '\n'))
+		if (!(add_token(last_tok, f - last_tok, STRING, head)))
+			return (0);
 	return (1);
 }
 
@@ -146,7 +142,8 @@ t_token				*lexer(char *line)
 	head->next = NULL;
 	head->size = 0;
 	head->content = NULL;
-	lexer_main_loop(line, head);
+	if (!(lexer_main_loop(line, head)))
+		return (NULL);
 	add_token("EOF", 3, EOF_, head);
 	return (head);
 }

@@ -6,7 +6,7 @@
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/20 11:27:46 by conoel            #+#    #+#             */
-/*   Updated: 2019/05/25 13:23:39 by conoel           ###   ########.fr       */
+/*   Updated: 2019/06/18 22:57:55 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,28 +21,26 @@ static char	*file_name(char *name_s)
 	return (ret);
 }
 
-static t_magic	reverse_bits(t_magic magic)
+static t_magic	tot_prog_size(void)
 {
-	int		i;
-	t_magic tmp;
+	t_magic			tot;
+	t_instruction	*head;
 
-	tmp = 0;
-	i = sizeof(t_magic);
-	while (i > 0)
+	tot = 0;
+	head = get_instructions(NULL);
+	while (head)
 	{
-		tmp = tmp << 8;
-		tmp += magic & 0xFF;
-		magic = magic >> 8;
-		i--;
+		tot += head->byte_len;
+		head = head->next;
 	}
-	return (tmp);
+	return (reverse_bits(tot));
 }
 
 static void	header(t_token *head, int fd)
 {
 	header_t	*header;
 
-	if (!(header = malloc(sizeof( header_t))))
+	if (!(header = malloc(sizeof(header_t))))
 		return ;
 	ft_bzero(header, sizeof(header_t));
 	header->magic = reverse_bits(COREWAR_EXEC_MAGIC);
@@ -50,7 +48,9 @@ static void	header(t_token *head, int fd)
 	ft_strcpy(header->prog_name, head->content);
 	next_token(&head);
 	ft_strcpy(header->comment, head->content);
+	header->prog_size = tot_prog_size();
 	write(fd, header, sizeof(header_t));
+	free (header);
 }
 
 int		compile(t_token *head, char *file_name_s)
@@ -66,12 +66,12 @@ int		compile(t_token *head, char *file_name_s)
 	head = NULL;
 	code = get_instructions(NULL);
 	code = code->next;
-	tmp = file_name(file_name_s);
 	free(tmp);
 	while (code)
 	{
-		if (!(add_line(fd, code)))
-			return (return_("/!\\ Compilation failure /!\\"));
+		if (code->type != LABEL)
+			if (!(add_line(fd, code)))
+				return (return_("/!\\ Compilation failure /!\\"));
 		code = code->next;
 	}
 	release_instructions();

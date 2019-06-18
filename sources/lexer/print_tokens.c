@@ -6,13 +6,13 @@
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/17 13:57:55 by conoel            #+#    #+#             */
-/*   Updated: 2019/05/17 16:29:45 by conoel           ###   ########.fr       */
+/*   Updated: 2019/06/14 11:02:30 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 
-static char *definitions[] =
+static char *g_definitions[] =
 {
 	"START",
 	"LIVE",
@@ -46,11 +46,12 @@ static char *definitions[] =
 
 void			print_tokens(t_token *head)
 {
-	next_token(&head);;
+	next_token(&head);
 	while (head)
 	{
-		ft_printf("<\033[1m%s\033[0m [\033[31m%s\033[0m]>\n", head->content, definitions[head->type]);
-		next_token(&head);;
+		ft_printf("<\033[1m%s\033[0m [\033[31m%s\033[0m]>\n",
+			head->content, g_definitions[head->type]);
+		next_token(&head);
 	}
 	write(1, "\n", 1);
 }

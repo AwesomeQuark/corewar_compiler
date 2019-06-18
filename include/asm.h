@@ -6,7 +6,7 @@
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/07 19:26:11 by conoel            #+#    #+#             */
-/*   Updated: 2019/05/25 13:23:56 by conoel           ###   ########.fr       */
+/*   Updated: 2019/06/18 22:59:10 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define ASM_H
 
 # include <fcntl.h>
-# include "haflib.h"
 # include "parser.h"
 
 # define TRUE 1
@@ -25,11 +24,14 @@ int		transcribe(t_token *head);
 int		compile(t_token *head, char *file_name_s);
 
 int		add_line(int fd, t_instruction *actual);
+t_magic	reverse_bits(t_magic magic);
+short	reverse_bits_s(short nb);
 
 /*
 **	UTILS
 */
 int		is_instruction(t_token *token);
 int		is_parameter(t_token *token, int choices);
+int		get_label_addr(char *label_name);
 
 #endif

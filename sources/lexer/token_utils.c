@@ -6,7 +6,7 @@
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 15:28:10 by conoel            #+#    #+#             */
-/*   Updated: 2019/05/17 16:55:54 by conoel           ###   ########.fr       */
+/*   Updated: 2019/06/14 10:58:20 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static t_token	*before_last_token(t_token *head)
 	if (!head || !head->next)
 		return (NULL);
 	while (head->next->next != NULL)
-		next_token(&head);;
+		next_token(&head);
 	return (head);
 }
 
@@ -26,7 +26,7 @@ static t_token	*last_token(t_token *head)
 	if (!head)
 		return (NULL);
 	while (head->next != NULL)
-		next_token(&head);;
+		next_token(&head);
 	return (head);
 }
 
@@ -38,7 +38,8 @@ int				add_token(char *content, size_t size, t_token_type type,
 
 	if (!(new = malloc(sizeof(t_token))))
 		return (0);
-	new->content = ft_memdup(content, size);
+	if (!(new->content = ft_memdup(content, size)))
+		return (0);
 	new->size = size;
 	new->type = type;
 	new->next = NULL;
@@ -69,12 +70,12 @@ void			release_tokens(t_token *head)
 		if (head->content)
 			free(head->content);
 		tmp = head;
-		next_token(&head);;
+		next_token(&head);
 		free(tmp);
 	}
 }
 
-void		next_token(t_token **current)
+void			next_token(t_token **current)
 {
 	if (!current || !*current)
 		return ;

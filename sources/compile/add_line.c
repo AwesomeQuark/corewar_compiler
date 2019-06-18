@@ -6,7 +6,7 @@
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/23 13:49:22 by conoel            #+#    #+#             */
-/*   Updated: 2019/06/06 22:44:02 by conoel           ###   ########.fr       */
+/*   Updated: 2019/06/18 23:40:50 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,48 +26,53 @@ static int	get_type(t_token_type type)
 	return (i);
 }
 
-int			dec_to_hex(int nb)
+void		translate_indirect(t_token *param, int *len, char *buff)
 {
-	int		tot;
+	unsigned short	nb;
 
-	tot = 0;
-	while (nb > 0)
+	if (param->content[0] == LABEL_CHAR)
+		nb = 0;//(short)get_label_addr(&(param->content[1]));
+	else
+		nb = (short)ft_atoi(param->content);
+	ft_printf("%d\n", nb);
+	nb = reverse_bits_s(nb);
+	buff[(*len)++] = nb & 0xFF;
+	nb = nb >> 8;
+	buff[(*len)++] = nb & 0xFF;
+	return ;
+}
+/*
+void		translate_direct(t_token *param, int *len, char *buff)
+{
+	unsigned int	nb;
+	int				i;
+
+	i = 0;
+	if (param->content[0] == LABEL_CHAR)
 	{
-		tot = tot * 16;
-		tot += nb / 16;
-		nb = nb / 16;
+		translate_indirect((short)get_label_addr(&(param->content[2])), len, buff);
+		return ;
 	}
-	return (tot);
+	else
+		nb = ft_atoi(param->content);
+	nb = reverse_bits(nb);
+	while (i++ < 4)
+	{
+		buff[(*len)++] = nb & 0xFF;
+		nb = nb >> 8;
+	}	
+	return ;
 }
-
-void		str_to_direct_param(char *param, int *len, char *str)
-{
-	int	nb;
-
-	(void)len;
-	(void)str;
-	nb = ft_atoi(param);
-	ft_printf("dec: %d\n");
-	nb = dec_to_hex(nb);
-	ft_printf("hex: %d\n", nb);
-}
-
-static void	param_encoding(t_token *param, int *len, char *str)
+*/
+static int	param_encoding(t_token *param, int *len, char *buff)
 {
 	if (param->type == REG)
-	{
-		str[*len] = param->content[1] - '0';
-		*len += 1;
-	}
+		buff[(*len)++] = param->content[1] - '0';
 	if (param->type == DIRECT)  //TODO
-	{
-		str_to_direct_param(param->content, len, str);
-	}
-	if(param->type == INDIRECT) //TODO
-	{
-		str[*len] = 42;
-		*len += 1;
-	}
+		translate_indirect(param, len, buff);
+	if (param->type == INDIRECT)
+		translate_indirect(param, len, buff);
+	return (TRUE);
 }
 
 static char	ocp(t_token_type param, int i)
@@ -95,23 +100,21 @@ int			add_line(int fd, t_instruction *actual)
 
 	if (!(buff = malloc(64)))
 		return (FALSE);
-	ft_bzero(buff, 64);
-	i = 0;
 	len = 1;
 	type = get_type(actual->type);
 	buff[0] = g_op_tab[type].opcode;
 	if (g_op_tab[type].ocp)
-	{
-		buff[1] = 0;
-		len++;
-	}
+		buff[len++] = 0;
+	i = 0;
 	while (i < actual->argc)
 	{
-		param_encoding(actual->args[i], &len, buff);
+		if (!(param_encoding(actual->args[i], &len, buff)))
+			return (FALSE);
 		if (g_op_tab[type].ocp)
 			buff[1] += ocp(actual->args[i]->type, i);
 		i++;
-		
 	}
-	return (write(fd, buff, len));
+	write(fd, buff, len);
+	free(buff);
+	return (TRUE);
 }

@@ -6,7 +6,7 @@
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:33:27 by zaz               #+#    #+#             */
-/*   Updated: 2019/05/23 13:54:06 by conoel           ###   ########.fr       */
+/*   Updated: 2019/06/18 22:52:04 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ typedef struct		header_s
 {
   t_magic			magic;
   char				prog_name[PROG_NAME_LENGTH + 1];
-  unsigned int		prog_size;
+  t_magic			prog_size;
   char				comment[COMMENT_LENGTH + 1];
 }					header_t;
 

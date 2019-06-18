@@ -6,7 +6,7 @@
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/16 16:10:21 by conoel            #+#    #+#             */
-/*   Updated: 2019/05/25 13:24:25 by conoel           ###   ########.fr       */
+/*   Updated: 2019/06/14 11:00:29 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static size_t		is_label(char *str, char *authorised_chars)
 {
 	size_t	i;
 	size_t	j;
-	
+
 	i = 0;
 	j = 0;
 	while (authorised_chars[j] && str[i])
@@ -47,16 +47,18 @@ static size_t		is_label(char *str, char *authorised_chars)
 	return (i);
 }
 
-t_token_type identify_string(t_token *token)
+t_token_type		identify_string(t_token *token)
 {
-	t_token_type type;
-	size_t	ret;
+	t_token_type	type;
+	size_t			ret;
 
 	if (token->size > 0 && token->content[token->size - 1] == LABEL_CHAR)
 	{
 		if ((ret = is_label(token->content, LABEL_CHARS)) != token->size - 1)
 		{
-			ft_printf("%sWarning%s: Uncorrect char \'%c\' in a label [line %d; char %d]\n", YELLOW, DEF, token->content[ret], token->line, ret);
+			ft_printf("%sWarning%s: Uncorrect char \'%c\' in a label",
+				YELLOW, DEF, token->content[ret]);
+			ft_printf(" [line %d; char %d]\n", token->line, ret);
 		}
 		type = LABEL;
 	}

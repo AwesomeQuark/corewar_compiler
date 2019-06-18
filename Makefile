@@ -32,19 +32,22 @@ LEXER_SRC =		lexer.c\
 LEXER_DIR =		lexer/
 LEXER =			${addprefix $(LEXER_DIR), $(LEXER_SRC)}
 
-	PARSER_SRC =		parser.c\
+PARSER_SRC =		parser.c\
 					op.c\
-					instruction_utils.c
-	PARSER_DIR =		parser/
-	PARSER =			${addprefix $(PARSER_DIR), $(PARSER_SRC)}
+					instruction_utils.c\
+					line_byte_len.c
+PARSER_DIR =		parser/
+PARSER =			${addprefix $(PARSER_DIR), $(PARSER_SRC)}
 
-	COMPILER_SRC =		compile.c\
-					add_line.c
-	COMPILER_DIR =		compile/
-	COMPILER =			${addprefix $(COMPILER_DIR), $(COMPILER_SRC)}
-	#main sources
-	SRC_DIR =			./sources/
-	SRC =				${addprefix $(SRC_DIR), $(SRC_NAME)}
+COMPILER_SRC =		compile.c\
+					add_line.c\
+					label_addr.c\
+					reverse.c
+COMPILER_DIR =		compile/
+COMPILER =			${addprefix $(COMPILER_DIR), $(COMPILER_SRC)}
+#main sources
+SRC_DIR =			./sources/
+SRC =				${addprefix $(SRC_DIR), $(SRC_NAME)}
 #objects
 OBJ_NAME =		$(SRC_NAME:.c=.o)
 OBJ_DIR =		./objects/
@@ -72,7 +75,7 @@ LIB =			${addprefix $(LIB_DIR), $(LIB_NAME)}
 
 #######  MISC  ########
 
-FLAGS =			-Wall -Werror -Wextra -g3
+FLAGS =			#-Wall -Werror -Wextra -g3
 DEBUG_FLAGS =	$(FLAGS) -O0 -g3 -fsanitize=address
 CC =			clang
 
@@ -80,7 +83,7 @@ CC =			clang
 ##################################### RULES #####################################
 #################################################################################
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re lre
 .SILENT:
 
 ########## GENERALS ##########
@@ -88,6 +91,10 @@ CC =			clang
 all: ./auteur $(LIB) $(OBJ_DIR) $(NAME) $(HEADER)
 
 re: fclean all
+
+lre:
+	rm -r $(OBJ_DIR)
+	make all
 
 clean:
 	rm -rf $(OBJ_DIR)
@@ -123,7 +130,7 @@ $(OBJ_DIR): $(ALL_OBJ_DIR)
 
 $(ALL_OBJ_DIR):
 	mkdir -p $@
-	echo "\033[32m\033[1m\033[4mCreated033[0m\033[32m : $@ obj dir\033[0m"
+	echo "\033[32m\033[1m\033[4mCreated\033[0m\033[32m : $@ obj dir\033[0m"
 
 ./auteur:
 	echo $(AUTEUR) > ./auteur
