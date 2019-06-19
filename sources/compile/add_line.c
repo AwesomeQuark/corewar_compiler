@@ -6,7 +6,7 @@
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/23 13:49:22 by conoel            #+#    #+#             */
-/*   Updated: 2019/06/19 18:42:56 by conoel           ###   ########.fr       */
+/*   Updated: 2019/06/19 21:04:13 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,22 +41,30 @@ void		translate_indirect(t_token *param, int *len, char *buff)
 	return ;
 }
 
+void		translate_label(char *name, int *len, char *buff)
+{
+	unsigned short	nb;
+
+	nb = get_label_addr(name);
+	nb = reverse_bits_s(nb);
+	buff[(*len)++] = nb & 0xFF;
+	nb = nb >> 8;
+	buff[(*len)++] = nb & 0xFF;
+	return ;
+}
+
 void		translate_direct(t_token *param, int *len, char *buff)
 {
 	unsigned int	nb;
 	int				i;
-	char			*tmp;
 
 	i = 0;
 	if (param && param->content && param->content[1] == LABEL_CHAR)
 	{
-		tmp = param->content;
-		param->content = ft_strdup(&(param->content[1]));
-		free(tmp);
-		translate_indirect(param, len, buff);
+		translate_label(&(param->content[2]), len, buff);
 		return ;
 	}
-	nb = ft_atoi(&(param->content[2]));
+	nb = ft_atoi(&(param->content[1]));
 	nb = reverse_bits(nb);
 	while (i++ < 4)
 	{
