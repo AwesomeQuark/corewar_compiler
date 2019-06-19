@@ -6,7 +6,7 @@
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/07 17:14:29 by conoel            #+#    #+#             */
-/*   Updated: 2019/05/20 15:38:20 by conoel           ###   ########.fr       */
+/*   Updated: 2019/06/19 21:30:46 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include "haflib.h"
 # include "op.h"
 
-extern int	g_line;
+extern int		g_line;
 
 typedef enum
 {
@@ -48,19 +48,19 @@ typedef enum
 	NAME_CMD,
 	COMMENT_CMD,
 	EOF_
-} t_token_type;
+}	t_token_type;
 
-typedef struct s_token_def
+typedef struct	s_token_def
 {
-	char*			content;
+	char			*content;
 	size_t			size;
 	t_token_type	type;
 }				t_token_def;
 
-typedef struct s_token
+typedef struct	s_token
 {
 	struct s_token	*next;
-	char*			content;
+	char			*content;
 	size_t			size;
 	t_token_type	type;
 	int				line;
@@ -78,7 +78,6 @@ typedef struct	s_op
 	char			unknown3;
 }				t_op;
 
-
 /*
 **	EXTERNAL
 */
@@ -90,7 +89,8 @@ void			next_token(t_token **current);
 /*
 **	INTERNAL
 */
-int				add_token(char *content, size_t size, t_token_type type, t_token *head);
+int				add_token(char *content, size_t size,
+					t_token_type type, t_token *head);
 void			skip_until_char(char **file, char **last_token, char c);
 t_token_type	identify_string(t_token *token);
 
