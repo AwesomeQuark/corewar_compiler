@@ -6,7 +6,7 @@
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/23 13:49:22 by conoel            #+#    #+#             */
-/*   Updated: 2019/06/19 21:16:53 by conoel           ###   ########.fr       */
+/*   Updated: 2019/06/19 21:24:08 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ void		translate_direct(t_token *param, int *len, char *buff, int byte)
 static int	param_encoding(t_token *param, int *len, char *buff, int byte)
 {
 	if (param->type == REG)
-		buff[(*len)++] = param->content[1] - '0';
+		buff[(*len)++] = ft_atoi(&param->content[1]);
 	if (param->type == DIRECT)
 		translate_direct(param, len, buff, byte);
 	if (param->type == INDIRECT)
