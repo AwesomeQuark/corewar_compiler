@@ -6,7 +6,7 @@
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/09 17:27:34 by magicwartho       #+#    #+#             */
-/*   Updated: 2019/06/18 23:17:56 by conoel           ###   ########.fr       */
+/*   Updated: 2019/06/19 18:56:21 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ static t_token	*scan_instruction(t_op op, t_token *head)
 	{
 		if (!is_parameter(head, op.args[i++]))
 		{
-			ft_printf("\n%sError:%s Expected argument, found \"%s\" [l %d]\n"
+			ft_printf("\n%sError:%s Bad argument type, found \"%s\" [l %d]\n"
 				, RED, DEF, head->content, head->line);
 			return (FALSE);
 		}
@@ -123,7 +123,8 @@ int				parse(t_token *head)
 			if ((i = get_type(head)) == -1)
 				return (FALSE);
 			mem = head;
-			head = scan_instruction(g_op_tab[i], head);
+			if (!(head = scan_instruction(g_op_tab[i], head)))
+				return (FALSE);
 			if (!(add_instruction(g_op_tab[i], mem)))
 				return (FALSE);
 		}

@@ -75,8 +75,8 @@ LIB =			${addprefix $(LIB_DIR), $(LIB_NAME)}
 
 #######  MISC  ########
 
-FLAGS =			#-Wall -Werror -Wextra -g3
-DEBUG_FLAGS =	$(FLAGS) -O0 -g3 -fsanitize=address
+FLAGS =			-Wall -Werror -Wextra -g3
+DEBUG_FLAGS =	$(FLAGS) -O0 -fsanitize=address
 CC =			clang
 
 #################################################################################

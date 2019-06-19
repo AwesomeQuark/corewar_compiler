@@ -6,7 +6,7 @@
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/17 13:55:33 by conoel            #+#    #+#             */
-/*   Updated: 2019/06/18 22:24:44 by conoel           ###   ########.fr       */
+/*   Updated: 2019/06/19 18:53:07 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,11 @@ int	is_parameter(t_token *token, int choice)
 	t_token_type	t;
 
 	t = token->type;
-	if (t == DIRECT && choice & T_DIR)
+	if (t == DIRECT && (choice & T_DIR))
 		return (TRUE);
-	if (t == REG && choice & T_REG)
+	if (t == REG && (choice & T_REG))
 		return (TRUE);
-	if (t == INDIRECT && choice & T_IND)
+	if (t == INDIRECT && (choice & T_IND))
 		return (TRUE);
 	else
 		return (FALSE);
