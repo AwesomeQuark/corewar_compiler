@@ -6,7 +6,7 @@
 #    By: conoel <conoelstudent.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/01/10 21:14:13 by conoel            #+#    #+#              #
-#    Updated: 2019/04/26 14:01:05 by conoel           ###   ########.fr        #
+#    Updated: 2019/06/24 04:27:01 by conoel           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -75,7 +75,7 @@ LIB =			${addprefix $(LIB_DIR), $(LIB_NAME)}
 
 #######  MISC  ########
 
-FLAGS =			-Wall -Werror -Wextra -g3
+FLAGS =			-Wall -Werror -Wextra -g
 DEBUG_FLAGS =	$(FLAGS) -O0 -fsanitize=address
 CC =			clang
 

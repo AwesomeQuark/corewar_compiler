@@ -6,20 +6,11 @@
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/20 11:27:46 by conoel            #+#    #+#             */
-/*   Updated: 2019/06/18 22:57:55 by conoel           ###   ########.fr       */
+/*   Updated: 2019/06/24 13:36:32 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
-
-static char	*file_name(char *name_s)
-{
-	char	*ret;
-
-	name_s[ft_strlen(name_s) - 2] = '\0';
-	ret = concat("./", name_s, ".cor");
-	return (ret);
-}
 
 static t_magic	tot_prog_size(void)
 {
@@ -53,20 +44,17 @@ static void	header(t_token *head, int fd)
 	free (header);
 }
 
-int		compile(t_token *head, char *file_name_s)
+int		compile(t_token *head, char *compiled_file_name)
 {
 	t_instruction	*code;
 	int		fd;
-	char	*tmp;
 
-	tmp = file_name(file_name_s);
-	if (!(fd = open(tmp , O_CREAT | O_WRONLY | O_TRUNC, 0644)))
-		return (return_("Error: failed to create .cor file (compile, compile.c)"));
+	if (!(fd = open(compiled_file_name , O_CREAT | O_WRONLY | O_TRUNC, 0644)))
+		return (return_("Error: failed to compile (compile, compile.c)"));
 	header(head, fd);
 	head = NULL;
 	code = get_instructions(NULL);
 	code = code->next;
-	free(tmp);
 	while (code)
 	{
 		if (code->type != LABEL)

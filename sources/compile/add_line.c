@@ -6,7 +6,7 @@
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/23 13:49:22 by conoel            #+#    #+#             */
-/*   Updated: 2019/06/19 21:24:08 by conoel           ###   ########.fr       */
+/*   Updated: 2019/06/23 01:46:51 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ void		translate_indirect(t_token *param, int *len, char *buff)
 void		translate_label(char *name, int *len, char *buff, int byte)
 {
 	unsigned short	nb;
+
 
 	nb = get_label_addr(name) - byte;
 	nb = reverse_bits_s(nb);

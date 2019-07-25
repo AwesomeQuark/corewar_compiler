@@ -6,7 +6,7 @@
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/07 17:14:29 by conoel            #+#    #+#             */
-/*   Updated: 2019/06/19 21:30:46 by conoel           ###   ########.fr       */
+/*   Updated: 2019/06/26 14:21:50 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ typedef struct	s_op
 	int				cycles;
 	char			*description;
 	char			ocp;
-	char			unknown3;
+	char			unknown;
 }				t_op;
 
 /*
