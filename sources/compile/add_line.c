@@ -6,7 +6,7 @@
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/23 13:49:22 by conoel            #+#    #+#             */
-/*   Updated: 2019/08/28 16:59:34 by conoel           ###   ########.fr       */
+/*   Updated: 2019/08/28 17:35:53 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void		write_number_to_memory(char **buff, int nb, int bytes)
 	{
 		*((*buff)++) = nb & 0xFF;
 		nb = nb >> 8;
-	}	
+	}
 }
 
 static int	param_encoding(t_token *param, char **buff, int byte, int op)
@@ -32,11 +32,10 @@ static int	param_encoding(t_token *param, char **buff, int byte, int op)
 	if (param->type == DIRECT)
 	{
 		if (param && param->content && param->content[1] == LABEL_CHAR)
-			write_number_to_memory(buff, get_label_addr(&(param->content[2])) - byte, 2);
+			write_number_to_memory(buff, get_label_addr(&(param->content[2]))
+				- byte, 2);
 		else if (g_op_tab[op].direct_short)
-		{
 			write_number_to_memory(buff, ft_atoi(&(param->content[1])), 2);
-		}
 		else
 			write_number_to_memory(buff, ft_atoi(&(param->content[1])), 4);
 	}

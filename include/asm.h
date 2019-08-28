@@ -6,7 +6,7 @@
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/07 19:26:11 by conoel            #+#    #+#             */
-/*   Updated: 2019/08/28 14:59:41 by conoel           ###   ########.fr       */
+/*   Updated: 2019/08/28 17:44:51 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 
 # define TRUE 1
 # define FALSE 0
+# define USAGE "Usage:\t./asm [champion_name].s\n\t./asm -src [champion_name].s -dest [compiled_file].cor"
 
 int		parse(t_token *head);
 int		transcribe(t_token *head);

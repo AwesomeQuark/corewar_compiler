@@ -6,13 +6,13 @@
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/28 14:46:06 by conoel            #+#    #+#             */
-/*   Updated: 2019/08/28 14:59:37 by conoel           ###   ########.fr       */
+/*   Updated: 2019/08/28 17:14:33 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
 
-int	get_type_id(t_token_type type)
+int			get_type_id(t_token_type type)
 {
 	int		i;
 
@@ -20,7 +20,7 @@ int	get_type_id(t_token_type type)
 	while (g_op_tab[i].type != type)
 	{
 		if (i == 17)
-			break;
+			break ;
 		i++;
 	}
 	return (i);

@@ -3,6 +3,7 @@
 		"lexer.h": "c",
 		"asm.h": "c",
 		"haflib.h": "c",
-		"stdlib.h": "c"
+		"stdlib.h": "c",
+		"__config": "c"
 	}
 }

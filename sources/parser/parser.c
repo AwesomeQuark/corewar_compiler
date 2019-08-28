@@ -6,7 +6,7 @@
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/09 17:27:34 by magicwartho       #+#    #+#             */
-/*   Updated: 2019/08/28 14:59:26 by conoel           ###   ########.fr       */
+/*   Updated: 2019/08/28 18:54:29 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,6 @@ static int		get_type(t_token *current)
 
 int				parse(t_token *head)
 {
-
 	t_token	*mem;
 	int		i;
 

@@ -6,7 +6,7 @@
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/18 22:57:30 by conoel            #+#    #+#             */
-/*   Updated: 2019/08/28 16:01:54 by conoel           ###   ########.fr       */
+/*   Updated: 2019/08/28 17:12:14 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,10 @@ unsigned int	reverse_bits(unsigned int nb)
 	return (tmp);
 }
 
-short	reverse_bits_s(short nb)
+short			reverse_bits_s(short nb)
 {
 	int		i;
-	short tmp;
+	short	tmp;
 
 	tmp = 0;
 	i = sizeof(short);

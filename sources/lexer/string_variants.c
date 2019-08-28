@@ -6,7 +6,7 @@
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/16 16:10:21 by conoel            #+#    #+#             */
-/*   Updated: 2019/06/19 18:55:30 by conoel           ###   ########.fr       */
+/*   Updated: 2019/08/28 17:15:39 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,8 @@ t_token_type		identify_string(t_token *token)
 		type = REG;
 	else if (token->content[0] == DIRECT_CHAR)
 		type = DIRECT;
-	else if ((token->content[0] == LABEL_CHAR && is_label(token->content + 1, LABEL_CHARS)) || is_num(token->content))
+	else if ((token->content[0] == LABEL_CHAR && is_label(token->content + 1,
+			LABEL_CHARS)) || is_num(token->content))
 		type = INDIRECT;
 	else
 		type = STRING;

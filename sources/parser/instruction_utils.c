@@ -6,13 +6,14 @@
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/20 11:07:43 by conoel            #+#    #+#             */
-/*   Updated: 2019/06/18 23:27:25 by conoel           ###   ########.fr       */
+/*   Updated: 2019/08/28 17:44:41 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-t_instruction		*new_instruction(t_instruction *last, t_token_type type, int argc)
+t_instruction	*new_instruction(t_instruction *last,
+	t_token_type type, int argc)
 {
 	t_instruction	*new;
 
@@ -29,7 +30,7 @@ t_instruction		*new_instruction(t_instruction *last, t_token_type type, int argc
 	return (new);
 }
 
-t_instruction		*get_instructions(t_instruction *new)
+t_instruction	*get_instructions(t_instruction *new)
 {
 	static t_instruction	*head = NULL;
 
@@ -40,7 +41,7 @@ t_instruction		*get_instructions(t_instruction *new)
 	return (NULL);
 }
 
-void				release_instructions(void)
+void			release_instructions(void)
 {
 	t_instruction	*head;
 	t_instruction	*tmp;
@@ -55,14 +56,14 @@ void				release_instructions(void)
 	}
 }
 
-t_instruction		*last_instruction(t_instruction *head)
+t_instruction	*last_instruction(t_instruction *head)
 {
 	while (head->next)
 		head = head->next;
 	return (head);
 }
 
-t_instruction 		*add_label(t_instruction *last, t_token *label)
+t_instruction	*add_label(t_instruction *last, t_token *label)
 {
 	t_instruction	*new;
 
