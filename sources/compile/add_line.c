@@ -6,100 +6,43 @@
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/23 13:49:22 by conoel            #+#    #+#             */
-/*   Updated: 2019/06/23 01:46:51 by conoel           ###   ########.fr       */
+/*   Updated: 2019/08/28 16:25:56 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
 
-static int	get_type(t_token_type type)
+void		write_number_to_memory(int *len, char *buff, int nb, int bytes)
 {
-	int		i;
-
-	i = 0;
-	while (g_op_tab[i].type != type)
-	{
-		if (i == 17)
-			break;
-		i++;
-	}
-	return (i);
-}
-
-int			get_byte(t_instruction *actual)
-{
-	t_instruction	*head;
-	int				addr;
-
-	addr = 0;
-	head = get_instructions(NULL);
-	while (head != NULL)
-	{
-		if (actual == head)
-			return (addr);
-		addr += head->byte_len;
-		head = head->next;
-	}
-	return (0);
-}
-
-void		translate_indirect(t_token *param, int *len, char *buff)
-{
-	unsigned short	nb;
-
-	if (param->content[0] == LABEL_CHAR)
-		nb = 0;
-	else
-		nb = (short)ft_atoi(param->content);
-	nb = reverse_bits_s(nb);
-	buff[(*len)++] = nb & 0xFF;
-	nb = nb >> 8;
-	buff[(*len)++] = nb & 0xFF;
-	return ;
-}
-
-void		translate_label(char *name, int *len, char *buff, int byte)
-{
-	unsigned short	nb;
-
-
-	nb = get_label_addr(name) - byte;
-	nb = reverse_bits_s(nb);
-	buff[(*len)++] = nb & 0xFF;
-	nb = nb >> 8;
-	buff[(*len)++] = nb & 0xFF;
-	return ;
-}
-
-void		translate_direct(t_token *param, int *len, char *buff, int byte)
-{
-	unsigned int	nb;
-	int				i;
-
-	i = 0;
-	if (param && param->content && param->content[1] == LABEL_CHAR)
-	{
-		translate_label(&(param->content[2]), len, buff, byte);
-		return ;
-	}
-	nb = ft_atoi(&(param->content[1]));
-	nb = reverse_bits(nb);
-	while (i++ < 4)
+	if (bytes == 4)
+		nb = reverse_bits(nb);
+	else if (bytes == 2)
+		nb = reverse_bits_s(nb);
+	while (bytes-- > 0)
 	{
 		buff[(*len)++] = nb & 0xFF;
 		nb = nb >> 8;
 	}	
-	return ;
 }
 
 static int	param_encoding(t_token *param, int *len, char *buff, int byte)
 {
 	if (param->type == REG)
-		buff[(*len)++] = ft_atoi(&param->content[1]);
+		write_number_to_memory(len, buff, ft_atoi(&param->content[1]), 1);
 	if (param->type == DIRECT)
-		translate_direct(param, len, buff, byte);
+	{
+		if (param && param->content && param->content[1] == LABEL_CHAR)
+			write_number_to_memory(len, buff, get_label_addr(&(param->content[2])) - byte, 2);
+		else
+			write_number_to_memory(len, buff, ft_atoi(&(param->content[1])), 4);
+	}
 	if (param->type == INDIRECT)
-		translate_indirect(param, len, buff);
+	{
+		if (param->content[0] == LABEL_CHAR)
+			write_number_to_memory(len, buff, 0, 2);
+		else
+			write_number_to_memory(len, buff, ft_atoi(param->content), 2);
+	}
 	return (TRUE);
 }
 
@@ -129,7 +72,7 @@ int			add_line(int fd, t_instruction *actual)
 	if (!(buff = malloc(64)))
 		return (FALSE);
 	len = 1;
-	type = get_type(actual->type);
+	type = get_type_id(actual->type);
 	buff[0] = g_op_tab[type].opcode;
 	if (g_op_tab[type].ocp)
 		buff[len++] = 0;

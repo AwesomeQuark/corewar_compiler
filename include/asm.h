@@ -6,7 +6,7 @@
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/07 19:26:11 by conoel            #+#    #+#             */
-/*   Updated: 2019/06/18 22:59:10 by conoel           ###   ########.fr       */
+/*   Updated: 2019/08/28 14:59:41 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,5 +33,7 @@ short	reverse_bits_s(short nb);
 int		is_instruction(t_token *token);
 int		is_parameter(t_token *token, int choices);
 int		get_label_addr(char *label_name);
+int     get_type_id(t_token_type type);
+int		get_byte(t_instruction *actual);
 
 #endif

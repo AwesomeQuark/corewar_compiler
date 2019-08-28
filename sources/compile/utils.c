@@ -1,47 +1,44 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   reverse.c                                          :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/06/18 22:57:30 by conoel            #+#    #+#             */
-/*   Updated: 2019/08/28 16:01:54 by conoel           ###   ########.fr       */
+/*   Created: 2019/08/28 14:46:06 by conoel            #+#    #+#             */
+/*   Updated: 2019/08/28 14:59:37 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
 
-unsigned int	reverse_bits(unsigned int nb)
-{
-	int				i;
-	unsigned int	tmp;
-
-	tmp = 0;
-	i = sizeof(unsigned int);
-	while (i > 0)
-	{
-		tmp = tmp << 8;
-		tmp += nb & 0xFF;
-		nb = nb >> 8;
-		i--;
-	}
-	return (tmp);
-}
-
-short	reverse_bits_s(short nb)
+int	get_type_id(t_token_type type)
 {
 	int		i;
-	short tmp;
 
-	tmp = 0;
-	i = sizeof(short);
-	while (i > 0)
+	i = 0;
+	while (g_op_tab[i].type != type)
 	{
-		tmp = tmp << 8;
-		tmp += nb & 0xFF;
-		nb = nb >> 8;
-		i--;
+		if (i == 17)
+			break;
+		i++;
 	}
-	return (tmp);
+	return (i);
+}
+
+int			get_byte(t_instruction *actual)
+{
+	t_instruction	*head;
+	int				addr;
+
+	addr = 0;
+	head = get_instructions(NULL);
+	while (head != NULL)
+	{
+		if (actual == head)
+			return (addr);
+		addr += head->byte_len;
+		head = head->next;
+	}
+	return (0);
 }

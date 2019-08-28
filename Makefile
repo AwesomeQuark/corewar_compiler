@@ -42,7 +42,8 @@ PARSER =			${addprefix $(PARSER_DIR), $(PARSER_SRC)}
 COMPILER_SRC =		compile.c\
 					add_line.c\
 					label_addr.c\
-					reverse.c
+					reverse.c\
+					utils.c
 COMPILER_DIR =		compile/
 COMPILER =			${addprefix $(COMPILER_DIR), $(COMPILER_SRC)}
 #main sources
