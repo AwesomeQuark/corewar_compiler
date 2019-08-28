@@ -6,7 +6,7 @@
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/23 13:49:22 by conoel            #+#    #+#             */
-/*   Updated: 2019/08/28 16:07:42 by conoel           ###   ########.fr       */
+/*   Updated: 2019/08/28 17:00:55 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static int	param_encoding(t_token *param, int type)
 		len++;
 	if (param->type == DIRECT)
 	{
-		if (param->content[1] == ':' || (type >= 9 && type <= 15 && type != 13))
+		if (param->content[1] == ':' || g_op_tab[type].direct_short)
 			len += 2;
 		else
 			len += 4;
