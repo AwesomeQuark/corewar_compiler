@@ -6,7 +6,7 @@
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/07 19:24:21 by conoel            #+#    #+#             */
-/*   Updated: 2019/08/28 17:44:15 by conoel           ###   ########.fr       */
+/*   Updated: 2019/08/29 16:25:28 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,19 +24,12 @@ static char		*file_name(char *name)
 	return (ret);
 }
 
-static int		options(int argc, char **argv, char **compiled_file_name
-	, char **assembly_file_name)
+static void		options_arguments(int argc, char **argv,
+	char **compiled_file_name, char **assembly_file_name)
 {
 	int i;
 
 	i = 0;
-	*assembly_file_name = NULL;
-	*compiled_file_name = NULL;
-	if (argc == 2 && ft_strcmp(&argv[1][ft_strlen(argv[1]) - 2], ".s") == 0)
-	{
-		*assembly_file_name = argv[1];
-		*compiled_file_name = file_name(argv[1]);
-	}
 	while (++i < argc)
 	{
 		if (ft_strcmp(argv[i], "-dest") == 0 && i + 1 < argc &&
@@ -52,9 +45,20 @@ static int		options(int argc, char **argv, char **compiled_file_name
 			continue ;
 		}
 	}
-	if (*assembly_file_name == NULL || *compiled_file_name == NULL)
-		return (0);
-	return (1);
+}
+
+static int		options(int argc, char **argv, char **compiled_file_name
+	, char **assembly_file_name)
+{
+	*assembly_file_name = NULL;
+	*compiled_file_name = NULL;
+	if (argc == 2 && ft_strcmp(&argv[1][ft_strlen(argv[1]) - 2], ".s") == 0)
+	{
+		*assembly_file_name = argv[1];
+		*compiled_file_name = file_name(argv[1]);
+	}
+	options_arguments(argc, argv, compiled_file_name, assembly_file_name);
+	return (*assembly_file_name == NULL || *compiled_file_name == NULL ? 0 : 1);
 }
 
 static t_token	*get_tokens(char *file_name)
