@@ -6,7 +6,7 @@
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/07 19:24:21 by conoel            #+#    #+#             */
-/*   Updated: 2019/08/29 16:25:28 by conoel           ###   ########.fr       */
+/*   Updated: 2019/08/30 14:38:59 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static void		options_arguments(int argc, char **argv,
 		if (ft_strcmp(argv[i], "-dest") == 0 && i + 1 < argc &&
 			ft_strcmp(&argv[i + 1][ft_strlen(argv[i + 1]) - 4], ".cor") == 0)
 		{
-			*compiled_file_name = argv[++i];
+			*compiled_file_name = ft_strdup(argv[++i]);
 			continue ;
 		}
 		if (ft_strcmp(argv[i], "-src") == 0 && i + 1 < argc &&
@@ -101,21 +101,25 @@ int				main(int argc, char **argv)
 		return (return_(USAGE));
 	if ((token_head = get_tokens(assembly_file_name)) == NULL)
 	{
+		free(compiled_file_name);
 		ft_putstr_fd("Error: lexer failure (main, main.c)\n", 2);
 		return (EXIT_FAILURE);
 	}
 	if (parse(token_head) == FALSE)
 	{
+		free(compiled_file_name);
 		release_tokens(token_head);
 		ft_putstr_fd("Error: parsing error (main, main.c)\n", 2);
 		return (EXIT_FAILURE);
 	}
 	if (compile(token_head, compiled_file_name) == FALSE)
 	{
+		free(compiled_file_name);
 		release_tokens(token_head);
 		ft_putstr_fd("Error: compilation error (main, main.c)\n", 2);
 		return (EXIT_FAILURE);
 	}
+	free(compiled_file_name);
 	release_tokens(token_head);
 	return (EXIT_SUCCESS);
 }

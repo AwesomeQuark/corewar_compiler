@@ -6,7 +6,7 @@
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/09 17:27:34 by magicwartho       #+#    #+#             */
-/*   Updated: 2019/08/28 19:08:50 by conoel           ###   ########.fr       */
+/*   Updated: 2019/08/29 16:35:10 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,28 +62,27 @@ static t_token	*scan_instruction(t_op op, t_token *head)
 	size_t	i;
 
 	i = 0;
-	ft_printf("%s%sOperation:%s %s%-*s%s  [", "\033[4m", BOLD, DEF, GREEN,
+	ft_printf("%s%sOperation:%s %s%-*s%s ", "\033[4m", BOLD, DEF, GREEN,
 		7, head->content, DEF);
 	next_token(&head);
 	while (op.argc)
 	{
 		if (!is_parameter(head, op.args[i++]))
 		{
-			ft_printf("\n%sError:%s Bad argument type, found \"%s\" [l %d]\n"
-				, RED, DEF, head->content, head->line);
+			ft_printf("\nError:% Bad argument type, found \"%s\" [l %d]\n"
+				, head->content, head->line);
 			return (FALSE);
 		}
 		ft_printf(" %s%s%s ", YELLOW, head->content, DEF);
 		--op.argc ? next_token(&head) : 0;
 		if (op.argc && head->type != SEPARATOR)
 		{
-			ft_printf("\n%sError:%s Expected separator, found \"%s\" [l %d]\n"
-				, RED, DEF, head->content, head->line);
+			ft_printf("\nError: Expected separator, found \"%s\" [l %d]\n"
+				, head->content, head->line);
 			return (FALSE);
 		}
 		op.argc ? next_token(&head) : 0;
 	}
-	ft_printf("]");
 	return (head);
 }
 
@@ -113,10 +112,8 @@ int				parse(t_token *head)
 	get_instructions(new_instruction(NULL, START, 0));
 	if (!skip_start(&head))
 		return (FALSE);
-	while (head)
+	while (head && head->type != EOF_)
 	{
-		if (head->type == EOF_)
-			break ;
 		if (head->type != LABEL && head->type != NAME && head->type != COMMENT)
 		{
 			if ((i = get_type(head)) == -1)
