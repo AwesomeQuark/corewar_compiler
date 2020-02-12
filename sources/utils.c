@@ -6,13 +6,23 @@
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/17 13:55:33 by conoel            #+#    #+#             */
-/*   Updated: 2019/06/19 18:53:07 by conoel           ###   ########.fr       */
+/*   Updated: 2020/02/12 17:30:46 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
 
-int	is_instruction(t_token *token)
+int 	quit(char *file_name, t_token *token_head, char *msg, int ret_value)
+{
+	free(file_name);
+	if (token_head)
+		release_tokens(token_head);
+	if (msg)
+		ft_putstr_fd(msg, 2);
+	return (ret_value);
+}
+
+int		is_instruction(t_token *token)
 {
 	t_token_type t;
 
@@ -23,7 +33,7 @@ int	is_instruction(t_token *token)
 		return (FALSE);
 }
 
-int	is_parameter(t_token *token, int choice)
+int		is_parameter(t_token *token, int choice)
 {
 	t_token_type	t;
 

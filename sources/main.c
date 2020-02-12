@@ -6,7 +6,7 @@
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/07 19:24:21 by conoel            #+#    #+#             */
-/*   Updated: 2019/08/30 14:38:59 by conoel           ###   ########.fr       */
+/*   Updated: 2020/02/12 17:30:23 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,25 +101,19 @@ int				main(int argc, char **argv)
 		return (return_(USAGE));
 	if ((token_head = get_tokens(assembly_file_name)) == NULL)
 	{
-		free(compiled_file_name);
-		ft_putstr_fd("Error: lexer failure (main, main.c)\n", 2);
-		return (EXIT_FAILURE);
+		return (quit(compiled_file_name, NULL,
+			"Error: lexer failure (main, main.c)\n", EXIT_FAILURE));
 	}
 	if (parse(token_head) == FALSE)
 	{
-		free(compiled_file_name);
-		release_tokens(token_head);
-		ft_putstr_fd("Error: parsing error (main, main.c)\n", 2);
-		return (EXIT_FAILURE);
+		return (quit(compiled_file_name, token_head,
+			"Error: parsing error (main, main.c)\n", EXIT_FAILURE));
 	}
 	if (compile(token_head, compiled_file_name) == FALSE)
 	{
-		free(compiled_file_name);
-		release_tokens(token_head);
-		ft_putstr_fd("Error: compilation error (main, main.c)\n", 2);
-		return (EXIT_FAILURE);
+		return (quit(compiled_file_name, token_head,
+			"Error: compilation error (main, main.c)\n", EXIT_FAILURE));
 	}
-	free(compiled_file_name);
-	release_tokens(token_head);
-	return (EXIT_SUCCESS);
+	return (quit(compiled_file_name, token_head,
+		NULL, EXIT_SUCCESS));
 }

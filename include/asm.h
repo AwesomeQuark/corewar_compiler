@@ -6,7 +6,7 @@
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/07 19:26:11 by conoel            #+#    #+#             */
-/*   Updated: 2019/08/29 16:29:24 by conoel           ###   ########.fr       */
+/*   Updated: 2020/02/12 17:28:56 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,5 +38,7 @@ int		is_parameter(t_token *token, int choices);
 int		get_label_addr(char *label_name);
 int		get_type_id(t_token_type type);
 int		get_byte(t_instruction *actual);
+
+int 	quit(char *file_name, t_token *token_head, char *msg, int ret_value);
 
 #endif
