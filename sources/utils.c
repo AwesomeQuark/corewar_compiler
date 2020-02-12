@@ -6,13 +6,13 @@
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/17 13:55:33 by conoel            #+#    #+#             */
-/*   Updated: 2020/02/12 17:30:46 by conoel           ###   ########.fr       */
+/*   Updated: 2020/02/12 18:44:23 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
 
-int 	quit(char *file_name, t_token *token_head, char *msg, int ret_value)
+int		quit(char *file_name, t_token *token_head, char *msg, int ret_value)
 {
 	free(file_name);
 	if (token_head)
