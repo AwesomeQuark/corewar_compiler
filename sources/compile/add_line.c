@@ -6,7 +6,7 @@
 /*   By: conoel <conoel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/23 13:49:22 by conoel            #+#    #+#             */
-/*   Updated: 2019/08/28 17:35:53 by conoel           ###   ########.fr       */
+/*   Updated: 2020/02/13 23:33:24 by conoel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,22 +27,28 @@ void		write_number_to_memory(char **buff, int nb, int bytes)
 
 static int	param_encoding(t_token *param, char **buff, int byte, int op)
 {
+	int nb;
+	(void)byte;
+
 	if (param->type == REG)
 		write_number_to_memory(buff, ft_atoi(&param->content[1]), 1);
 	if (param->type == DIRECT)
-	{
+	{	
 		if (param && param->content && param->content[1] == LABEL_CHAR)
-			write_number_to_memory(buff, get_label_addr(&(param->content[2]))
-				- byte, 2);
-		else if (g_op_tab[op].direct_short)
-			write_number_to_memory(buff, ft_atoi(&(param->content[1])), 2);
+			nb = get_label_addr(&(param->content[2])) - byte;
 		else
-			write_number_to_memory(buff, ft_atoi(&(param->content[1])), 4);
+			nb = ft_atoi(&(param->content[1]));
+		ft_printf("%s %d ###\n ", param->content, nb);
+		if (g_op_tab[op].direct_short)
+			write_number_to_memory(buff, nb, 2);
+		else
+			write_number_to_memory(buff, nb, 4);
 	}
 	if (param->type == INDIRECT)
 	{
 		if (param->content[0] == LABEL_CHAR)
-			write_number_to_memory(buff, 0, 2);
+			write_number_to_memory(buff, get_label_addr(&(param->content[2]))
+				- byte, 2);
 		else
 			write_number_to_memory(buff, ft_atoi(param->content), 2);
 	}
